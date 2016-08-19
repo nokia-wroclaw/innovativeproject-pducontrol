@@ -1,0 +1,19 @@
+{
+  "groups" : [
+    {
+      "id" : 1,
+      "name" : "grupa pierwsza",
+      "owner" : "Slawek"
+    },
+    {
+      "id" : 2,
+      "name" : "grupa druga",
+      "owner" : "Mati"
+    },
+    {
+      "id" : 3,
+      "name" : "grupa trzecia",
+      "owner" : "Kacper"
+    }
+  ]
+}
