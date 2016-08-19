@@ -1,5 +1,6 @@
 package com.pdumanager.slawek.pdumanager;
 
+import android.app.Application;
 import android.app.FragmentManager;
 import android.os.Bundle;
 import android.support.design.widget.NavigationView;
@@ -9,6 +10,7 @@ import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
+import android.widget.Toast;
 
 import com.pdumanager.slawek.pdumanager.fragments.DevicesActivity;
 import com.pdumanager.slawek.pdumanager.fragments.DevicesFromGroupActivity;
@@ -27,6 +29,7 @@ public class MenuActivity extends AppCompatActivity
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_menu);
+        ((GlobalApplication) getApplication()).setSelectedGroupName(null);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
@@ -68,7 +71,12 @@ public class MenuActivity extends AppCompatActivity
         } else if (id == R.id.nav_log_out) {
 
         } else if (id == R.id.nav_chosen_devices) {
-            fragmentManager.beginTransaction().replace(R.id.content_frame, new DevicesFromGroupActivity()).commit();
+            if(((GlobalApplication) this.getApplication()).getSelectedGroupName() == null){
+                Toast.makeText(this, "You didn't select any groups yet", Toast.LENGTH_LONG).show();
+                return false;
+            } else {
+                fragmentManager.beginTransaction().replace(R.id.content_frame, new DevicesFromGroupActivity()).commit();
+            }
         }
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);

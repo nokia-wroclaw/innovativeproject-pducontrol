@@ -16,7 +16,9 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
+import android.widget.TextView;
 
+import com.pdumanager.slawek.pdumanager.GlobalApplication;
 import com.pdumanager.slawek.pdumanager.MenuActivity;
 import com.pdumanager.slawek.pdumanager.R;
 import com.pdumanager.slawek.pdumanager.arrayAdapters.DeviceArrayAdapter;
@@ -83,6 +85,8 @@ public class MyGroupsActivity extends Fragment implements AdapterView.OnItemClic
         FragmentManager fragmentManager = getFragmentManager();
         NavigationView navigationView = ((MenuActivity) getActivity()).getNavigationView();
         navigationView.getMenu().getItem(1).setChecked(true);
+        String selectedGroup = ((TextView) view.findViewById(R.id.private_group_name)).getText().toString();
+        ((GlobalApplication) getActivity().getApplication()).setSelectedGroupName(selectedGroup);
         fragmentManager.beginTransaction().replace(R.id.content_frame, new DevicesFromGroupActivity()).commit();
     }
 }

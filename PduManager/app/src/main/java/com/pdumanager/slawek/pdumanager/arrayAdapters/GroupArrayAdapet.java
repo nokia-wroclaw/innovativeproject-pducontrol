@@ -40,7 +40,7 @@ public class GroupArrayAdapet extends ArrayAdapter<Group> {
         if(convertView == null){
             viewHolder = new ViewHolder();
             convertView = mInflater.inflate(mResourceId, parent, false);
-            viewHolder.mGroupNameTextView =(TextView) convertView.findViewById(R.id.group_name);
+            viewHolder.mGroupNameTextView =(TextView) convertView.findViewById(R.id.private_group_name);
             viewHolder.mGroupContainerLinearLayout = (LinearLayout) convertView.findViewById(R.id.private_group_on_list);
             convertView.setTag(viewHolder);
         } else{

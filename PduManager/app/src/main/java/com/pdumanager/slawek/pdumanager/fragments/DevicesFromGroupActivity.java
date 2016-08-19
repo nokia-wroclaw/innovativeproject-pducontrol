@@ -5,7 +5,9 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 
+import com.pdumanager.slawek.pdumanager.GlobalApplication;
 import com.pdumanager.slawek.pdumanager.R;
 
 import java.util.zip.Inflater;
@@ -15,6 +17,8 @@ import java.util.zip.Inflater;
  */
 public class DevicesFromGroupActivity extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        return inflater.inflate(R.layout.activity_devices_from_group, container, false);
+        View view = inflater.inflate(R.layout.activity_devices_from_group, container, false);
+        ((TextView) view.findViewById(R.id.nameGroupSelected)).setText(((GlobalApplication) getActivity().getApplication()).getSelectedGroupName());
+        return view;
     }
 }
