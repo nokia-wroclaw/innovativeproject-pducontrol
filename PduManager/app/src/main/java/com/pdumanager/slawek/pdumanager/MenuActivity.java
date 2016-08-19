@@ -11,11 +11,17 @@ import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 
 import com.pdumanager.slawek.pdumanager.fragments.DevicesActivity;
+import com.pdumanager.slawek.pdumanager.fragments.DevicesFromGroupActivity;
 import com.pdumanager.slawek.pdumanager.fragments.MyGroupsActivity;
 import com.pdumanager.slawek.pdumanager.fragments.PublicGroupsActivity;
 
 public class MenuActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
+
+    private NavigationView navigationView;
+    public NavigationView getNavigationView() {
+        return navigationView;
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -30,7 +36,7 @@ public class MenuActivity extends AppCompatActivity
         drawer.addDrawerListener(toggle);
         toggle.syncState();
 
-        NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
+        navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
         MenuItem itemDevices = navigationView.getMenu().getItem(0);
         itemDevices.setChecked(true);
@@ -61,6 +67,8 @@ public class MenuActivity extends AppCompatActivity
             fragmentManager.beginTransaction().replace(R.id.content_frame, new PublicGroupsActivity()).commit();
         } else if (id == R.id.nav_log_out) {
 
+        } else if (id == R.id.nav_chosen_devices) {
+            fragmentManager.beginTransaction().replace(R.id.content_frame, new DevicesFromGroupActivity()).commit();
         }
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);

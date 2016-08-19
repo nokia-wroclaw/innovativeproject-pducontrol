@@ -4,8 +4,12 @@
     <group android:checkableBehavior="single">
         <item
             android:id="@+id/nav_devices"
-            android:icon="@android:drawable/ic_menu_view"
+            android:icon="@android:drawable/ic_dialog_dialer"
             android:title="@string/nav_devices" />
+        <item
+            android:id="@+id/nav_chosen_devices"
+            android:icon="@android:drawable/ic_menu_view"
+            android:title="@string/nav_chosen_devices" />
         <item
             android:id="@+id/nav_my_groups"
             android:icon="@android:drawable/btn_star_big_on"
