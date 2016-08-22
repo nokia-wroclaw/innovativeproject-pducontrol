@@ -10,7 +10,7 @@
     tools:context="com.pdumanager.slawek.pdumanager.fragments.MyGroupsActivity">
 
     <ListView
-        android:id="@+id/private_groups_list"
+        android:id="@+id/groups_list"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
     </ListView>

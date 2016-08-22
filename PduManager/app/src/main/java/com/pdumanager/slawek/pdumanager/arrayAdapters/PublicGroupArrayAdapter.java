@@ -1,10 +1,8 @@
 package com.pdumanager.slawek.pdumanager.arrayAdapters;
 
 import android.content.Context;
-import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ArrayAdapter;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
@@ -12,27 +10,11 @@ import com.pdumanager.slawek.pdumanager.R;
 import com.pdumanager.slawek.pdumanager.model.Group;
 
 /**
- * Created by slawek on 19.08.16.
+ * Created by slawek on 22.08.16.
  */
-public class GroupArrayAdapet extends ArrayAdapter<Group> {
-    protected final LayoutInflater mInflater;
-    protected final int mResourceId;
-    public GroupArrayAdapet(Context context, int resource) {
+public class PublicGroupArrayAdapter extends GroupArrayAdapet {
+    public PublicGroupArrayAdapter(Context context, int resource) {
         super(context, resource);
-        mInflater = LayoutInflater.from(context);
-        mResourceId = resource;
-    }
-
-    public void setGroups(Group[] groups) {
-        clear();
-        for(Group group : groups){
-            add(group);
-        }
-        if(isEmpty()){
-            notifyDataSetInvalidated();
-        } else {
-            notifyDataSetChanged();
-        }
     }
 
     public View getView(int position, View convertView, ViewGroup parent) {
@@ -40,20 +22,23 @@ public class GroupArrayAdapet extends ArrayAdapter<Group> {
         if(convertView == null){
             viewHolder = new ViewHolder();
             convertView = mInflater.inflate(mResourceId, parent, false);
-            viewHolder.mGroupNameTextView =(TextView) convertView.findViewById(R.id.private_group_name);
-            viewHolder.mGroupContainerLinearLayout = (LinearLayout) convertView.findViewById(R.id.private_group_on_list);
+            viewHolder.mGroupNameTextView =(TextView) convertView.findViewById(R.id.public_group_name);
+            viewHolder.mOwnerNameTextView =(TextView) convertView.findViewById(R.id.owner_name);
+            viewHolder.mGroupContainerLinearLayout = (LinearLayout) convertView.findViewById(R.id.public_group_on_list);
             convertView.setTag(viewHolder);
         } else{
             viewHolder = (ViewHolder) convertView.getTag();
         }
         Group group = getItem(position);
         viewHolder.mGroupNameTextView.setText(group.name);
+        viewHolder.mOwnerNameTextView.setText(group.owner);
         viewHolder.mGroupContainerLinearLayout.setVisibility(View.VISIBLE);
         return convertView;
     }
 
     private class ViewHolder {
         TextView mGroupNameTextView;
+        TextView mOwnerNameTextView;
         LinearLayout mGroupContainerLinearLayout;
     }
 }
