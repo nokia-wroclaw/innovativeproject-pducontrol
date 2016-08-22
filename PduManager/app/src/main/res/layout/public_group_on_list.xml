@@ -5,13 +5,13 @@
     android:orientation="horizontal"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:paddingBottom="5dp"
-    android:paddingTop="5dp">
+    android:paddingBottom="@dimen/small_padding"
+    android:paddingTop="@dimen/small_padding">
 
     <LinearLayout
         android:orientation="vertical"
         android:layout_weight="1"
-        android:paddingLeft="12dp"
+        android:paddingLeft="@dimen/basic_padding"
         android:gravity="center_vertical"
         android:layout_width="wrap_content"
         android:layout_height="match_parent">
@@ -20,11 +20,11 @@
             android:id="@+id/public_group_name"
             android:text="grupa Slawka"
             android:layout_weight="0.5"
-            android:textSize="20sp"
+            android:textSize="@dimen/header_device_text_size"
             android:textColor="@color/colorPrimary"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:paddingBottom="3dp"/>
+            android:paddingBottom="@dimen/small_padding"/>
         <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -36,7 +36,7 @@
                 android:singleLine="true"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginRight="10dp"
+                android:layout_marginRight="@dimen/basic_padding"
                 />
 
             <TextView
@@ -53,14 +53,14 @@
     <LinearLayout
         android:orientation="vertical"
         android:gravity="center_vertical"
-        android:layout_width="80dp"
-        android:paddingLeft="10dp"
+        android:layout_width="@dimen/width_header_group_private"
+        android:paddingLeft="@dimen/basic_padding"
         android:layout_height="match_parent">
 
         <ImageView
             android:src="@android:drawable/stat_sys_download"
-            android:paddingLeft="10dp"
-            android:tint="#000"
+            android:paddingLeft="@dimen/basic_padding"
+            android:tint="@color/black"
             android:layout_gravity="center"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"

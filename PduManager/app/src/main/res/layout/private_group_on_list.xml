@@ -4,12 +4,12 @@
     android:id="@+id/private_group_on_list"
     android:orientation="horizontal"
     android:layout_width="match_parent"
-    android:layout_height="60dp">
+    android:layout_height="@dimen/height_row_private_group">
 
     <LinearLayout
         android:orientation="vertical"
         android:layout_weight="1"
-        android:paddingLeft="12dp"
+        android:paddingLeft="@dimen/basic_padding"
         android:gravity="center_vertical"
         android:layout_width="wrap_content"
         android:layout_height="match_parent">
@@ -18,7 +18,7 @@
             android:id="@+id/private_group_name"
             android:text="Grupa Slawka"
             android:textColor="@color/colorPrimaryDark"
-            android:textSize="20sp"
+            android:textSize="@dimen/header_device_text_size"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"/>
     </LinearLayout>
@@ -26,13 +26,13 @@
     <LinearLayout
         android:orientation="vertical"
         android:gravity="center_vertical"
-        android:layout_width="80dp"
-        android:paddingLeft="10dp"
+        android:layout_width="@dimen/width_header_group_private"
+        android:paddingLeft="@dimen/basic_padding"
         android:layout_height="match_parent">
 
         <ImageView
             android:src="@android:drawable/ic_media_play"
-            android:paddingLeft="10dp"
+            android:paddingLeft="@dimen/basic_padding"
             android:layout_gravity="center"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"

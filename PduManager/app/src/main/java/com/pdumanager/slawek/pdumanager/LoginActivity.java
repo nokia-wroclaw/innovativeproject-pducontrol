@@ -26,8 +26,8 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
 
     @Override
     public void onClick(View view) {
-        String username = mUsernameEditText.getText().toString();
-        String password = mPasswordEditText.getText().toString();
+        //String username = mUsernameEditText.getText().toString();
+        //String password = mPasswordEditText.getText().toString();
 
         Intent intent = new Intent(this, MenuActivity.class);
         startActivity(intent);

@@ -15,7 +15,7 @@ import android.widget.TextView;
 import com.pdumanager.slawek.pdumanager.GlobalApplication;
 import com.pdumanager.slawek.pdumanager.MenuActivity;
 import com.pdumanager.slawek.pdumanager.R;
-import com.pdumanager.slawek.pdumanager.arrayAdapters.GroupArrayAdapet;
+import com.pdumanager.slawek.pdumanager.arrayAdapters.GroupArrayAdapter;
 import com.pdumanager.slawek.pdumanager.model.GroupResponse;
 
 import org.json.JSONException;
@@ -27,7 +27,7 @@ import java.io.InputStream;
 
 public class MyGroupsActivity extends Fragment implements AdapterView.OnItemClickListener {
     private ListView mGroupsListView;
-    private GroupArrayAdapet mGroupsAdapter;
+    private GroupArrayAdapter mGroupsAdapter;
     private GroupResponse mResponse;
 
     @Nullable
@@ -35,7 +35,7 @@ public class MyGroupsActivity extends Fragment implements AdapterView.OnItemClic
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         super.onCreateView(inflater, container, savedInstanceState);
         View view = inflater.inflate(R.layout.activity_groups, container, false);
-        mGroupsAdapter = new GroupArrayAdapet(this.getActivity(), R.layout.private_group_on_list);
+        mGroupsAdapter = new GroupArrayAdapter(this.getActivity(), R.layout.private_group_on_list);
         mGroupsListView = (ListView) view.findViewById(R.id.groups_list);
         mGroupsListView.setAdapter(mGroupsAdapter);
         mGroupsListView.setOnItemClickListener(this);

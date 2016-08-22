@@ -14,10 +14,10 @@ import com.pdumanager.slawek.pdumanager.model.Group;
 /**
  * Created by slawek on 19.08.16.
  */
-public class GroupArrayAdapet extends ArrayAdapter<Group> {
+public class GroupArrayAdapter extends ArrayAdapter<Group> {
     protected final LayoutInflater mInflater;
     protected final int mResourceId;
-    public GroupArrayAdapet(Context context, int resource) {
+    public GroupArrayAdapter(Context context, int resource) {
         super(context, resource);
         mInflater = LayoutInflater.from(context);
         mResourceId = resource;
@@ -36,7 +36,7 @@ public class GroupArrayAdapet extends ArrayAdapter<Group> {
     }
 
     public View getView(int position, View convertView, ViewGroup parent) {
-        ViewHolder viewHolder  = null;
+        ViewHolder viewHolder;
         if(convertView == null){
             viewHolder = new ViewHolder();
             convertView = mInflater.inflate(mResourceId, parent, false);

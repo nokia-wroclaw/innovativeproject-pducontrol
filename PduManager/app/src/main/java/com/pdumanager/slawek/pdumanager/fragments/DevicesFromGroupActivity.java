@@ -10,8 +10,6 @@ import android.widget.TextView;
 import com.pdumanager.slawek.pdumanager.GlobalApplication;
 import com.pdumanager.slawek.pdumanager.R;
 
-import java.util.zip.Inflater;
-
 /**
  * Created by slawek on 19.08.16.
  */

@@ -2,7 +2,6 @@ package com.pdumanager.slawek.pdumanager.fragments;
 
 import android.app.Fragment;
 import android.support.annotation.Nullable;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -13,7 +12,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.pdumanager.slawek.pdumanager.R;
-import com.pdumanager.slawek.pdumanager.arrayAdapters.GroupArrayAdapet;
+import com.pdumanager.slawek.pdumanager.arrayAdapters.GroupArrayAdapter;
 import com.pdumanager.slawek.pdumanager.arrayAdapters.PublicGroupArrayAdapter;
 import com.pdumanager.slawek.pdumanager.model.GroupResponse;
 
@@ -27,7 +26,7 @@ import java.io.InputStream;
 public class PublicGroupsActivity extends Fragment implements AdapterView.OnItemClickListener {
 
     private ListView mGroupsListView;
-    private GroupArrayAdapet mGroupsAdapter;
+    private GroupArrayAdapter mGroupsAdapter;
     private GroupResponse mResponse;
 
     @Nullable

@@ -12,13 +12,13 @@ import com.pdumanager.slawek.pdumanager.model.Group;
 /**
  * Created by slawek on 22.08.16.
  */
-public class PublicGroupArrayAdapter extends GroupArrayAdapet {
+public class PublicGroupArrayAdapter extends GroupArrayAdapter {
     public PublicGroupArrayAdapter(Context context, int resource) {
         super(context, resource);
     }
 
     public View getView(int position, View convertView, ViewGroup parent) {
-        ViewHolder viewHolder  = null;
+        ViewHolder viewHolder;
         if(convertView == null){
             viewHolder = new ViewHolder();
             convertView = mInflater.inflate(mResourceId, parent, false);

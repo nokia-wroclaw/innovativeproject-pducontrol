@@ -1,6 +1,5 @@
 package com.pdumanager.slawek.pdumanager;
 
-import android.app.Application;
 import android.app.FragmentManager;
 import android.os.Bundle;
 import android.support.design.widget.NavigationView;

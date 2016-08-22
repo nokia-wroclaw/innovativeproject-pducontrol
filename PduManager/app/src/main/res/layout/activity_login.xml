@@ -36,7 +36,7 @@
                 android:orientation="vertical"
                 >
                 <EditText
-                    android:hint="Username"
+                    android:hint="@string/username_hint"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:inputType="textPersonName"
@@ -47,7 +47,7 @@
                     android:textColorHint="@color/input_white"
                     android:textSize="@dimen/login_input"/>
                 <EditText
-                    android:hint="Password"
+                    android:hint="@string/password_hint"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:inputType="textPassword"
@@ -62,7 +62,7 @@
                     android:layout_marginTop="@dimen/activity_horizontal_margin"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="Login"
+                    android:text="@string/login_text"
                     android:background="@color/input_white"
                     android:id="@+id/button_login"
                     android:layout_gravity="center_horizontal" />

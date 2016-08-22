@@ -9,7 +9,6 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.pdumanager.slawek.pdumanager.R;
-import com.pdumanager.slawek.pdumanager.fragments.DevicesActivity;
 import com.pdumanager.slawek.pdumanager.model.Device;
 
 /**
@@ -20,9 +19,9 @@ public class DeviceArrayAdapter extends ArrayAdapter<Device> {
     private final int mResourceId;
 
     public DeviceArrayAdapter(Context context, int device_on_list) {
-        super(context, device_on_list);
+        super(context, R.layout.device_on_list);
         mInflater = LayoutInflater.from(context);
-        mResourceId = device_on_list;
+        mResourceId = R.layout.device_on_list;
     }
 
 
@@ -39,7 +38,7 @@ public class DeviceArrayAdapter extends ArrayAdapter<Device> {
     }
 
     public View getView(int i, View converterView, ViewGroup viewGroup){
-        ViewHolder viewHolder  = null;
+        ViewHolder viewHolder;
         if(converterView == null) {
             viewHolder = new ViewHolder();
             converterView = mInflater.inflate(mResourceId, viewGroup, false);
