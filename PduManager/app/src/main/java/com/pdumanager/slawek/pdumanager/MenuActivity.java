@@ -9,6 +9,8 @@ import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
+import android.view.View;
+import android.view.ViewParent;
 import android.widget.Toast;
 
 import com.pdumanager.slawek.pdumanager.fragments.DevicesActivity;
@@ -51,6 +53,13 @@ public class MenuActivity extends AppCompatActivity
         if (drawer.isDrawerOpen(GravityCompat.START)) {
             drawer.closeDrawer(GravityCompat.START);
         } else {
+            FragmentManager fragmentManager = getFragmentManager();
+
+            if (fragmentManager.getBackStackEntryCount() <= 1){
+                moveTaskToBack(true);
+                android.os.Process.killProcess(android.os.Process.myPid());
+                System.exit(1);
+            }
             super.onBackPressed();
         }
     }
@@ -62,11 +71,11 @@ public class MenuActivity extends AppCompatActivity
         int id = item.getItemId();
 
         if (id == R.id.nav_devices) {
-            fragmentManager.beginTransaction().replace(R.id.content_frame, new DevicesActivity()).commit();
+            fragmentManager.beginTransaction().replace(R.id.content_frame, new DevicesActivity()).addToBackStack( "devices" ).commit();
         } else if (id == R.id.nav_my_groups) {
-            fragmentManager.beginTransaction().replace(R.id.content_frame, new MyGroupsActivity()).commit();
+            fragmentManager.beginTransaction().replace(R.id.content_frame, new MyGroupsActivity()).addToBackStack( "private_groups" ).commit();
         } else if (id == R.id.nav_public_groups) {
-            fragmentManager.beginTransaction().replace(R.id.content_frame, new PublicGroupsActivity()).commit();
+            fragmentManager.beginTransaction().replace(R.id.content_frame, new PublicGroupsActivity()).addToBackStack( "public_groups" ).commit();
         } else if (id == R.id.nav_log_out) {
 
         } else if (id == R.id.nav_chosen_devices) {
@@ -74,7 +83,7 @@ public class MenuActivity extends AppCompatActivity
                 Toast.makeText(this, "You didn't select any groups yet", Toast.LENGTH_LONG).show();
                 return false;
             } else {
-                fragmentManager.beginTransaction().replace(R.id.content_frame, new DevicesFromGroupActivity()).commit();
+                fragmentManager.beginTransaction().replace(R.id.content_frame, new DevicesFromGroupActivity()).addToBackStack( "devices_from_group" ).commit();
             }
         }
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);

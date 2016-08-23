@@ -3,6 +3,7 @@ package com.pdumanager.slawek.pdumanager.fragments;
 import android.app.Fragment;
 import android.support.annotation.Nullable;
 import android.os.Bundle;
+import android.support.design.widget.NavigationView;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.LayoutInflater;
@@ -12,6 +13,7 @@ import android.widget.AdapterView;
 import android.widget.EditText;
 import android.widget.ListView;
 
+import com.pdumanager.slawek.pdumanager.MenuActivity;
 import com.pdumanager.slawek.pdumanager.R;
 import com.pdumanager.slawek.pdumanager.arrayAdapters.DeviceArrayAdapter;
 import com.pdumanager.slawek.pdumanager.model.DeviceResponse;
@@ -34,6 +36,9 @@ public class DevicesActivity extends Fragment implements AdapterView.OnItemClick
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         super.onCreateView(inflater, container, savedInstanceState);
         View view = inflater.inflate(R.layout.activity_devices, container, false);
+        NavigationView navigationView = ((MenuActivity) getActivity()).getNavigationView();
+        navigationView.getMenu().getItem(0).setChecked(true);
+
         mInputSearch = (EditText) view.findViewById(R.id.search_input);
         mDevicesListView = (ListView) view.findViewById(R.id.list_devices);
         mDeviceArrayAdapter = new DeviceArrayAdapter(this.getActivity(), R.layout.device_on_list);

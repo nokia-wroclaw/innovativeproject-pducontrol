@@ -3,6 +3,7 @@ package com.pdumanager.slawek.pdumanager.fragments;
 import android.app.Fragment;
 import android.support.annotation.Nullable;
 import android.os.Bundle;
+import android.support.design.widget.NavigationView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -11,6 +12,7 @@ import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.pdumanager.slawek.pdumanager.MenuActivity;
 import com.pdumanager.slawek.pdumanager.R;
 import com.pdumanager.slawek.pdumanager.arrayAdapters.GroupArrayAdapter;
 import com.pdumanager.slawek.pdumanager.arrayAdapters.PublicGroupArrayAdapter;
@@ -34,6 +36,9 @@ public class PublicGroupsActivity extends Fragment implements AdapterView.OnItem
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         super.onCreateView(inflater, container, savedInstanceState);
         View view = inflater.inflate(R.layout.activity_groups, container, false);
+        NavigationView navigationView = ((MenuActivity) getActivity()).getNavigationView();
+        navigationView.getMenu().getItem(3).setChecked(true);
+
         mGroupsAdapter = new PublicGroupArrayAdapter(this.getActivity(), R.layout.public_group_on_list);
         mGroupsListView = (ListView) view.findViewById(R.id.groups_list);
         mGroupsListView.setAdapter(mGroupsAdapter);

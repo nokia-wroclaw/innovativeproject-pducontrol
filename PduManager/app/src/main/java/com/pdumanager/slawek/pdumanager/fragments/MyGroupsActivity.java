@@ -35,6 +35,9 @@ public class MyGroupsActivity extends Fragment implements AdapterView.OnItemClic
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         super.onCreateView(inflater, container, savedInstanceState);
         View view = inflater.inflate(R.layout.activity_groups, container, false);
+        NavigationView navigationView = ((MenuActivity) getActivity()).getNavigationView();
+        navigationView.getMenu().getItem(2).setChecked(true);
+
         mGroupsAdapter = new GroupArrayAdapter(this.getActivity(), R.layout.private_group_on_list);
         mGroupsListView = (ListView) view.findViewById(R.id.groups_list);
         mGroupsListView.setAdapter(mGroupsAdapter);
@@ -78,6 +81,6 @@ public class MyGroupsActivity extends Fragment implements AdapterView.OnItemClic
         navigationView.getMenu().getItem(1).setChecked(true);
         String selectedGroup = ((TextView) view.findViewById(R.id.private_group_name)).getText().toString();
         ((GlobalApplication) getActivity().getApplication()).setSelectedGroupName(selectedGroup);
-        fragmentManager.beginTransaction().replace(R.id.content_frame, new DevicesFromGroupActivity()).commit();
+        fragmentManager.beginTransaction().replace(R.id.content_frame, new DevicesFromGroupActivity()).addToBackStack( "devices_from_group" ).commit();
     }
 }

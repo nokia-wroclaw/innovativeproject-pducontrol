@@ -2,12 +2,14 @@ package com.pdumanager.slawek.pdumanager.fragments;
 
 import android.app.Fragment;
 import android.os.Bundle;
+import android.support.design.widget.NavigationView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.pdumanager.slawek.pdumanager.GlobalApplication;
+import com.pdumanager.slawek.pdumanager.MenuActivity;
 import com.pdumanager.slawek.pdumanager.R;
 
 /**
@@ -16,6 +18,9 @@ import com.pdumanager.slawek.pdumanager.R;
 public class DevicesFromGroupActivity extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.activity_devices_from_group, container, false);
+        NavigationView navigationView = ((MenuActivity) getActivity()).getNavigationView();
+        navigationView.getMenu().getItem(1).setChecked(true);
+
         ((TextView) view.findViewById(R.id.nameGroupSelected)).setText(((GlobalApplication) getActivity().getApplication()).getSelectedGroupName());
         return view;
     }
