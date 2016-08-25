@@ -1,12 +1,17 @@
 package com.pdumanager.slawek.pdumanager;
 
 import android.app.FragmentManager;
+import android.content.ClipData;
+import android.content.Context;
+import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.view.menu.MenuView;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 import android.view.View;
@@ -26,14 +31,28 @@ public class MenuActivity extends AppCompatActivity
         return navigationView;
     }
 
+    public static final String MyPREFERENCES = "MyPrefs";
+    SharedPreferences sharedPrefs;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        sharedPrefs = getSharedPreferences(MyPREFERENCES, Context.MODE_PRIVATE);
+        String username = sharedPrefs.getString(LoginActivity.Username, "");
+        //String password = sharedPrefs.getString(LoginActivity.Password, "");
+
+        if(username == null || username.equals(""))
+        {
+            Intent intent = new Intent(this,LoginActivity.class);
+            startActivity(intent);
+            return;
+        }
+
         setContentView(R.layout.activity_menu);
         ((GlobalApplication) getApplication()).setSelectedGroupName(null);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
                 this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
@@ -42,6 +61,7 @@ public class MenuActivity extends AppCompatActivity
 
         navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
+//        l
         MenuItem itemDevices = navigationView.getMenu().getItem(0);
         itemDevices.setChecked(true);
         onNavigationItemSelected(itemDevices);
@@ -77,6 +97,14 @@ public class MenuActivity extends AppCompatActivity
         } else if (id == R.id.nav_public_groups) {
             fragmentManager.beginTransaction().replace(R.id.content_frame, new PublicGroupsActivity()).addToBackStack( "public_groups" ).commit();
         } else if (id == R.id.nav_log_out) {
+            //SharedPreferences sharedPrefs = getSharedPreferences(LoginActivity.MyPREFERENCES, Context.MODE_PRIVATE);
+            SharedPreferences.Editor editor = sharedPrefs.edit();
+            Toast.makeText(getApplicationContext(), "Logged out: " + sharedPrefs.getString("username", ""), Toast.LENGTH_SHORT).show();
+            editor.clear();
+            editor.commit();
+
+            Intent intent = new Intent(this,LoginActivity.class);
+            startActivity(intent);
 
         } else if (id == R.id.nav_chosen_devices) {
             if(((GlobalApplication) this.getApplication()).getSelectedGroupName() == null){
