@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="vertical" android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:id="@+id/outlet_on_list">
 
     <LinearLayout
         android:paddingBottom="3dp"
@@ -22,18 +23,30 @@
             android:textSize="20sp"
             android:textAlignment="center"
             android:text="Outlet 1"
-            android:id="@+id/textView"
+            android:id="@+id/outletTextView"
             android:layout_gravity="center"
             android:layout_weight="0.9"/>
-            <ImageView
+
+            <TextView
+                android:textColor="@color/colorPrimaryDark"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="20sp"
+                android:textAlignment="center"
+                android:text="state:"
+                android:layout_gravity="center"
                 android:layout_weight="0.1"
+                />
+            <ImageView
+
+                android:id="@+id/outlet_state"
                 android:layout_gravity="right"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
-                android:src="@drawable/circle"/>
+                android:src="@drawable/green_circle"/>
         </LinearLayout>
         <LinearLayout
-            android:background="#000"
+            android:background="@color/white"
             android:orientation="horizontal"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -44,6 +57,8 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="On"
+                android:textColor="@color/white"
+                android:backgroundTint="@color/colorPrimary"
                 android:id="@+id/button" />
 
             <Button
@@ -51,13 +66,17 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Off"
+                android:textColor="@color/white"
+                android:backgroundTint="@color/colorPrimary"
                 android:id="@+id/button2" />
 
             <Button
                 android:layout_weight="1"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Restart"
+                android:text="Reset"
+                android:textColor="@color/white"
+                android:backgroundTint="@color/colorPrimary"
                 android:id="@+id/button3" />
 
             <Button
@@ -65,6 +84,8 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Check"
+                android:textColor="@color/white"
+                android:backgroundTint="@color/colorPrimary"
                 android:id="@+id/button4" />
         </LinearLayout>
 

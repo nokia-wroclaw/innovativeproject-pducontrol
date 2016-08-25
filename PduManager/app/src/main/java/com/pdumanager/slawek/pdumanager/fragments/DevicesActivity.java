@@ -1,6 +1,7 @@
 package com.pdumanager.slawek.pdumanager.fragments;
 
 import android.app.Fragment;
+import android.app.FragmentManager;
 import android.support.annotation.Nullable;
 import android.os.Bundle;
 import android.support.design.widget.NavigationView;
@@ -100,6 +101,7 @@ public class DevicesActivity extends Fragment implements AdapterView.OnItemClick
 
     @Override
     public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-
+        FragmentManager fragmentManager = getFragmentManager();
+        fragmentManager.beginTransaction().replace(R.id.content_frame, new OutletsActivity()).addToBackStack( "outlets" ).commit();
     }
 }
