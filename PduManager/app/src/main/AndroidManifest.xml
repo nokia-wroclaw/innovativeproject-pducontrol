@@ -16,7 +16,8 @@
             android:windowSoftInputMode="stateHidden">
 
         </activity>
-        <activity android:name=".LoginActivity">
+        <activity android:name=".LoginActivity"
+            android:windowSoftInputMode="stateHidden">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 

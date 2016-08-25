@@ -45,6 +45,35 @@
                 android:layout_height="match_parent"
                 android:src="@drawable/green_circle"/>
         </LinearLayout>
+        <View
+            android:layout_width="fill_parent"
+            android:layout_height="1dp"
+            android:background="#CCD0D4"/>
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+            <TextView
+                android:layout_weight="1"
+                android:textColor="@color/colorPrimaryDark"
+                android:text="Description:"
+                android:singleLine="true"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginRight="@dimen/basic_padding"
+                />
+
+            <TextView
+                android:layout_weight="0"
+                android:id="@+id/outlet_description"
+                android:maxLines="3"
+                android:ellipsize="end"
+                android:textColor="@color/colorPrimaryDark"
+                android:text="dasd asd asdasd asd asd"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                />
+        </LinearLayout>
         <LinearLayout
             android:background="@color/white"
             android:orientation="horizontal"

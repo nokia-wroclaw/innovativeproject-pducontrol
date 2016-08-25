@@ -49,6 +49,7 @@ public class OutletArrayAdapter extends ArrayAdapter<Outlet> {
             viewHolder = new ViewHolder();
             convertView = mInflater.inflate(mResource, parent, false);
             viewHolder.outletTextView = (TextView) convertView.findViewById(R.id.outletTextView);
+            viewHolder.mOutletDescription = (TextView) convertView.findViewById(R.id.outlet_description);
             viewHolder.mOutletLineraLayout = (LinearLayout) convertView.findViewById(R.id.outlet_on_list);
             viewHolder.outletState = (ImageView) convertView.findViewById((R.id.outlet_state));
             convertView.setTag(viewHolder);
@@ -57,6 +58,7 @@ public class OutletArrayAdapter extends ArrayAdapter<Outlet> {
         }
         Outlet outlet = getItem(position);
         viewHolder.outletTextView.setText("outlet: " + outlet.number);
+        viewHolder.mOutletDescription.setText(outlet.description);
 
         viewHolder.outletState.setImageResource(R.drawable.grey_circle);
         return convertView;
@@ -65,6 +67,7 @@ public class OutletArrayAdapter extends ArrayAdapter<Outlet> {
     private class ViewHolder{
         LinearLayout mOutletLineraLayout;
         TextView outletTextView;
+        TextView mOutletDescription;
         ImageView outletState;
     }
 }
