@@ -45,6 +45,7 @@ public class DeviceArrayAdapter extends ArrayAdapter<Device> {
             viewHolder.mDeviceNameTextView = (TextView) converterView.findViewById(R.id.device_name);
             viewHolder.mDeviceDescrTextView = (TextView) converterView.findViewById(R.id.device_description);
             viewHolder.mDeviceIpTextView = (TextView) converterView.findViewById(R.id.device_ip);
+            viewHolder.mDeviceId = (TextView) converterView.findViewById(R.id.device_id);
             viewHolder.mDeviceContainerLinearLayout = (LinearLayout) converterView.findViewById(R.id.device_on_list);
             converterView.setTag(viewHolder);
         }else{
@@ -52,6 +53,8 @@ public class DeviceArrayAdapter extends ArrayAdapter<Device> {
         }
         Device device = getItem(i);
         viewHolder.mDeviceIpTextView.setText("Ip: " + device.ip);
+        String device_id = Integer.toString(device.id);
+        viewHolder.mDeviceId.setText(device_id );
         viewHolder.mDeviceDescrTextView.setText("Description: " + device.descr);
         viewHolder.mDeviceNameTextView.setText("Name: " + device.name);
         viewHolder.mDeviceContainerLinearLayout.setVisibility(View.VISIBLE);
@@ -59,6 +62,7 @@ public class DeviceArrayAdapter extends ArrayAdapter<Device> {
     }
 
     private class ViewHolder {
+        TextView mDeviceId;
         TextView mDeviceIpTextView;
         TextView mDeviceNameTextView;
         TextView mDeviceDescrTextView;

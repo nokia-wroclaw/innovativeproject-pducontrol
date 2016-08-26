@@ -48,7 +48,16 @@ public class OutletsActivity extends Fragment {
     }
 
     private void fillListWithDevices() {
-        mArrayAdapter.setOutlets(mResponse.devices, mResponse.devices[1]);
+        int index = 0;
+        Bundle bundle = getArguments();
+        int id = (int) bundle.getSerializable("selected_pdu_id");
+        for(int i = 0; i < mResponse.devices.length; ++i){
+            if(mResponse.devices[i].id == id){
+                index = i;
+                break;
+            }
+        }
+        mArrayAdapter.setOutlets(mResponse.devices, mResponse.devices[index]);
     }
 
 

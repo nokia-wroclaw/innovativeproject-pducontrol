@@ -13,6 +13,7 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.EditText;
 import android.widget.ListView;
+import android.widget.TextView;
 
 import com.pdumanager.slawek.pdumanager.MenuActivity;
 import com.pdumanager.slawek.pdumanager.R;
@@ -102,6 +103,11 @@ public class DevicesActivity extends Fragment implements AdapterView.OnItemClick
     @Override
     public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
         FragmentManager fragmentManager = getFragmentManager();
-        fragmentManager.beginTransaction().replace(R.id.content_frame, new OutletsActivity()).addToBackStack( "outlets" ).commit();
+        OutletsActivity activity = new OutletsActivity();
+        Bundle bundle = new Bundle();
+        int deviceId = Integer.parseInt(((TextView) view.findViewById(R.id.device_id)).getText().toString());
+        bundle.putSerializable("selected_pdu_id", deviceId);
+        activity.setArguments(bundle);
+        fragmentManager.beginTransaction().replace(R.id.content_frame, activity).addToBackStack( "outlets" ).commit();
     }
 }
