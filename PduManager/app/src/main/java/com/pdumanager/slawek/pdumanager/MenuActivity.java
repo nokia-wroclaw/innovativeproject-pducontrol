@@ -13,6 +13,7 @@ import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.view.menu.MenuView;
 import android.support.v7.widget.Toolbar;
+import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewParent;
@@ -27,11 +28,14 @@ public class MenuActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
 
     private NavigationView navigationView;
+    private Menu menu;
+
     public NavigationView getNavigationView() {
         return navigationView;
     }
 
     public static final String MyPREFERENCES = "MyPrefs";
+    private boolean backPressedToExit;
     SharedPreferences sharedPrefs;
 
     @Override
@@ -40,7 +44,6 @@ public class MenuActivity extends AppCompatActivity
 
         sharedPrefs = getSharedPreferences(MyPREFERENCES, Context.MODE_PRIVATE);
         String username = sharedPrefs.getString(LoginActivity.Username, "");
-        //String password = sharedPrefs.getString(LoginActivity.Password, "");
 
         if(username == null || username.equals(""))
         {
@@ -61,7 +64,8 @@ public class MenuActivity extends AppCompatActivity
 
         navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
-//        l
+        MenuItem usernameItem = (MenuItem) navigationView.getMenu().getItem(4).getSubMenu().getItem(0);
+        usernameItem.setTitle(username);
         MenuItem itemDevices = navigationView.getMenu().getItem(0);
         itemDevices.setChecked(true);
         onNavigationItemSelected(itemDevices);
@@ -76,11 +80,18 @@ public class MenuActivity extends AppCompatActivity
             FragmentManager fragmentManager = getFragmentManager();
 
             if (fragmentManager.getBackStackEntryCount() <= 1){
-                moveTaskToBack(true);
-                android.os.Process.killProcess(android.os.Process.myPid());
-                System.exit(1);
+                if(backPressedToExit){
+                    moveTaskToBack(true);
+                    android.os.Process.killProcess(android.os.Process.myPid());
+                    System.exit(1);
+                } else {
+                    backPressedToExit = true;
+                    Toast.makeText(this, "Please click BACK again to exit", Toast.LENGTH_SHORT).show();
+                }
+            } else {
+                backPressedToExit = false;
+                super.onBackPressed();
             }
-            super.onBackPressed();
         }
     }
 

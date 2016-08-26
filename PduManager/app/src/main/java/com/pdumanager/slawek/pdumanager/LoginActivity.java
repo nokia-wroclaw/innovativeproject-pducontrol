@@ -20,6 +20,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
     public static final String Username = "username";
     public static final String Password = "password";
     SharedPreferences sharedPrefs;
+    private boolean backPressedToExit;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -33,6 +34,18 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         mLoginButton.setOnClickListener(this);
 
         sharedPrefs = getSharedPreferences(MenuActivity.MyPREFERENCES, Context.MODE_PRIVATE);
+    }
+
+    @Override
+    public void onBackPressed() {
+        if(backPressedToExit){
+            moveTaskToBack(true);
+            android.os.Process.killProcess(android.os.Process.myPid());
+            System.exit(1);
+        } else {
+            backPressedToExit = true;
+            Toast.makeText(this, "Please click BACK again to exit", Toast.LENGTH_SHORT).show();
+        }
     }
 
     @Override
