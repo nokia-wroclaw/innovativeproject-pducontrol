@@ -13,6 +13,7 @@ import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.view.menu.MenuView;
 import android.support.v7.widget.Toolbar;
+import android.text.TextUtils;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -45,30 +46,30 @@ public class MenuActivity extends AppCompatActivity
         sharedPrefs = getSharedPreferences(MyPREFERENCES, Context.MODE_PRIVATE);
         String username = sharedPrefs.getString(LoginActivity.Username, "");
 
-        if(username == null || username.equals(""))
-        {
+        if(TextUtils.isEmpty(username)) {
+        //if(username.equals("")) {
             Intent intent = new Intent(this,LoginActivity.class);
             startActivity(intent);
-            return;
         }
+        else {
+            setContentView(R.layout.activity_menu);
+            ((GlobalApplication) getApplication()).setSelectedGroupName(null);
+            Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+            setSupportActionBar(toolbar);
+            DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+            ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
+                    this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
+            drawer.addDrawerListener(toggle);
+            toggle.syncState();
 
-        setContentView(R.layout.activity_menu);
-        ((GlobalApplication) getApplication()).setSelectedGroupName(null);
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
-        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
-        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
-                this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
-        drawer.addDrawerListener(toggle);
-        toggle.syncState();
-
-        navigationView = (NavigationView) findViewById(R.id.nav_view);
-        navigationView.setNavigationItemSelectedListener(this);
-        MenuItem usernameItem = (MenuItem) navigationView.getMenu().getItem(4).getSubMenu().getItem(0);
-        usernameItem.setTitle(username);
-        MenuItem itemDevices = navigationView.getMenu().getItem(0);
-        itemDevices.setChecked(true);
-        onNavigationItemSelected(itemDevices);
+            navigationView = (NavigationView) findViewById(R.id.nav_view);
+            navigationView.setNavigationItemSelectedListener(this);
+            MenuItem usernameItem = (MenuItem) navigationView.getMenu().getItem(4).getSubMenu().getItem(0);
+            usernameItem.setTitle(username);
+            MenuItem itemDevices = navigationView.getMenu().getItem(0);
+            itemDevices.setChecked(true);
+            onNavigationItemSelected(itemDevices);
+        }
     }
 
     @Override
@@ -108,9 +109,9 @@ public class MenuActivity extends AppCompatActivity
         } else if (id == R.id.nav_public_groups) {
             fragmentManager.beginTransaction().replace(R.id.content_frame, new PublicGroupsActivity()).addToBackStack( "public_groups" ).commit();
         } else if (id == R.id.nav_log_out) {
-            //SharedPreferences sharedPrefs = getSharedPreferences(LoginActivity.MyPREFERENCES, Context.MODE_PRIVATE);
             SharedPreferences.Editor editor = sharedPrefs.edit();
-            Toast.makeText(getApplicationContext(), "Logged out: " + sharedPrefs.getString("username", ""), Toast.LENGTH_SHORT).show();
+
+            Toast.makeText(this, "Logged out: " + sharedPrefs.getString("username", ""), Toast.LENGTH_SHORT).show();
             editor.clear();
             editor.commit();
 
