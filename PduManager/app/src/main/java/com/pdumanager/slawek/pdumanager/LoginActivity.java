@@ -12,9 +12,11 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
-//import com.unboundid.ldap.sdk.AddRequest;
-//import com.unboundid.ldap.sdk.LDAPConnection;
-//import com.unboundid.ldap.sdk.LDAPException;
+import com.unboundid.ldap.sdk.BindRequest;
+import com.unboundid.ldap.sdk.BindResult;
+import com.unboundid.ldap.sdk.LDAPConnection;
+import com.unboundid.ldap.sdk.LDAPException;
+import com.unboundid.ldap.sdk.SimpleBindRequest;
 
 import java.sql.Date;
 
@@ -23,20 +25,23 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
     private EditText mUsernameEditText;
     private EditText mPasswordEditText;
 
+    private boolean loginFlag = true;
+    private boolean backPressedToExit;
+
     public static final String Username = "username";
     public static final String Password = "password";
 
-//    String address = "ldaps://ed-p-gl.emea.nsn-net.net";
-//    int port = 389;
-//    boolean loginFlag = true;
-//    String bindDN = "uid=%(user)s,ou=users,dc=example,dc=com";
-//    String password = "secret";
-//    LDAPConnection connection;
-//    AddRequest addRequest;
+    String password = "secret";
+    String address = "ldaps://ed-p-gl.emea.nsn-net.net";
+    String bindDN = "uid=%(user)s,ou=users,dc=example,dc=com";
+    int port = 389;
+
+    LDAPConnection connection;
+    BindRequest bindRequest;
+    BindResult bindResult;
 
     SharedPreferences sharedPrefs;
     SharedPreferences.Editor editor;
-    private boolean backPressedToExit;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -48,13 +53,6 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         mPasswordEditText = (EditText) findViewById(R.id.password_input);
 
         mLoginButton.setOnClickListener(this);
-
-        sharedPrefs = getSharedPreferences(MenuActivity.MyPREFERENCES, Context.MODE_PRIVATE);
-        editor =  sharedPrefs.edit();
-        //editor.clear();
-        editor.commit();
-
-        Toast.makeText(this, sharedPrefs.getString(Username, ""), Toast.LENGTH_SHORT).show();
     }
 
     @Override
@@ -76,25 +74,34 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
 
 //        try {
 //            connection = new LDAPConnection(address, port, bindDN, password);
-//            connection.setConnectionName("DemoConnection");
-//            String conName = connection.getConnectionName();
-//            long time = connection.getConnectTime();
-//            java.text.SimpleDateFormat formatter = new java.text.SimpleDateFormat("dd-MM-yy HH:mm:ss");
-//            String dateString = formatter.format(new Date(time));
-//            Toast.makeText(getBaseContext(),"Connected to LDAP server....connection_name="+conName+" at time"+dateString, Toast.LENGTH_LONG).show();
+//            connection.setConnectionName("LDAPConnection");
+//            bindRequest = new SimpleBindRequest(username, password);
+//            bindResult = connection.bind(bindRequest);
+//
+//            if(bindResult.getResultCode().isConnectionUsable()) {
+//                String conName = connection.getConnectionName();
+//                long time = connection.getConnectTime();
+//                java.text.SimpleDateFormat formatter = new java.text.SimpleDateFormat("dd-MM-yy HH:mm:ss");
+//                String dateString = formatter.format(new Date(time));
+//                Toast.makeText(getBaseContext(),
+//                               "Connected to LDAP server....connection_name="+conName+" at time"+dateString,
+//                               Toast.LENGTH_LONG).show();
+//            } else {
+//                Toast.makeText(this, "Wrong credentials!", Toast.LENGTH_LONG).show();
+//            }
 //        } catch(LDAPException e) {
 //            loginFlag = false;
 //            e.printStackTrace();
 //            Toast.makeText(getBaseContext(),"No connection was established" , Toast.LENGTH_LONG).show();
 //        } catch(Exception e) {
 //            e.printStackTrace();
-//        }
-//        finally {
+//        } finally {
 //            if(loginFlag) {
 //                connection.close();
 //                Toast.makeText(getBaseContext(), "Connection Closed successfully", Toast.LENGTH_LONG).show();
 //            }
 //        }
+
         if(username.equals("mwojdyla") && password.equals("zaq12wsx"))
         {
             editor.putString(Username, username);
