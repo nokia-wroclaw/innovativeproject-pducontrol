@@ -4,6 +4,7 @@
     <modules>
       <module fileurl="file://$PROJECT_DIR$/PduManager.iml" filepath="$PROJECT_DIR$/PduManager.iml" />
       <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
+      <module fileurl="file://$PROJECT_DIR$/unboundid-ldapsdk-se/unboundid-ldapsdk-se.iml" filepath="$PROJECT_DIR$/unboundid-ldapsdk-se/unboundid-ldapsdk-se.iml" />
     </modules>
   </component>
 </project>
