@@ -8,5 +8,5 @@ import java.io.Serializable;
 public class Group implements Serializable {
     public int id;
     public String name;
-    public String owner;
+    public Person owner;
 }

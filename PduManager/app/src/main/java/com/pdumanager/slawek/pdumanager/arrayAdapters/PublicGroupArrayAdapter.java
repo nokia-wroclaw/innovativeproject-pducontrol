@@ -31,7 +31,7 @@ public class PublicGroupArrayAdapter extends GroupArrayAdapter {
         }
         Group group = getItem(position);
         viewHolder.mGroupNameTextView.setText(group.name);
-        viewHolder.mOwnerNameTextView.setText(group.owner);
+        viewHolder.mOwnerNameTextView.setText(group.owner.user_name);
         viewHolder.mGroupContainerLinearLayout.setVisibility(View.VISIBLE);
         return convertView;
     }
