@@ -52,6 +52,8 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         mUsernameEditText = (EditText) findViewById(R.id.username_input);
         mPasswordEditText = (EditText) findViewById(R.id.password_input);
 
+        sharedPrefs = getSharedPreferences(MenuActivity.MyPREFERENCES, Context.MODE_PRIVATE);
+
         mLoginButton.setOnClickListener(this);
     }
 
@@ -71,6 +73,8 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
     public void onClick(View view) {
         String username = mUsernameEditText.getText().toString().trim();
         String password = mPasswordEditText.getText().toString().trim();
+
+        editor = sharedPrefs.edit();
 
 //        try {
 //            connection = new LDAPConnection(address, port, bindDN, password);
