@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:paddingBottom="@dimen/small_padding"
+    android:paddingLeft="@dimen/small_padding"
+    android:paddingRight="@dimen/small_padding"
+    android:paddingTop="@dimen/small_padding"
+    tools:context=".fragments.DevicesActivity">
+    <EditText
+        android:hint="@string/search_hint"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/search_form"
+        android:inputType="text"
+        android:ems="10"
+        android:id="@+id/search_input"
+        android:paddingBottom="@dimen/activity_horizontal_margin"
+        android:textColor="@color/black"
+        android:textColorHint="@color/colorPrimary"
+        android:textSize="@dimen/search_input"/>
+    <ListView
+        android:layout_marginTop="@dimen/search_form"
+        android:id="@+id/list_devices"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"/>
+</RelativeLayout>
