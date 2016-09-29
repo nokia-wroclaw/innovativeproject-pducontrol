@@ -27,5 +27,4 @@ dependencies {
     compile 'com.android.support:design:24.1.0'
     compile files('libs/gson-2.2.2.jar')
     compile project(':unboundid-ldapsdk-se')
-    compile files('libs/android-query-full.0.25.10.jar')
 }
