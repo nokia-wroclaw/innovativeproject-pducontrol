@@ -1,0 +1,122 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:id="@+id/outlet_on_list">
+
+    <LinearLayout
+        android:paddingBottom="3dp"
+        android:paddingTop="3dp"
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/input_white"
+        android:layout_gravity="center_horizontal">
+        <LinearLayout
+            android:orientation="horizontal"
+            android:layout_width="match_parent"
+            android:layout_height="40dp">
+        <TextView
+            android:textColor="@color/colorPrimaryDark"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="20sp"
+            android:textAlignment="center"
+            android:text="Outlet 1"
+            android:id="@+id/outletTextView"
+            android:layout_gravity="center"
+            android:layout_weight="0.9"/>
+
+            <TextView
+                android:textColor="@color/colorPrimaryDark"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="20sp"
+                android:textAlignment="center"
+                android:text="state:"
+                android:layout_gravity="center"
+                android:layout_weight="0.1"
+                />
+            <ImageView
+
+                android:id="@+id/outlet_state"
+                android:layout_gravity="right"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:src="@drawable/green_circle"/>
+        </LinearLayout>
+        <View
+            android:layout_width="fill_parent"
+            android:layout_height="1dp"
+            android:background="#CCD0D4"/>
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+            <TextView
+                android:layout_weight="1"
+                android:textColor="@color/colorPrimaryDark"
+                android:text="Description:"
+                android:singleLine="true"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginRight="@dimen/basic_padding"
+                />
+
+            <TextView
+                android:layout_weight="0"
+                android:id="@+id/outlet_description"
+                android:maxLines="3"
+                android:ellipsize="end"
+                android:textColor="@color/colorPrimaryDark"
+                android:text="dasd asd asdasd asd asd"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                />
+        </LinearLayout>
+        <LinearLayout
+            android:background="@color/white"
+            android:orientation="horizontal"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal">
+
+            <Button
+                android:layout_weight="1"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="On"
+                android:textColor="@color/white"
+                android:backgroundTint="@color/colorPrimary"
+                android:id="@+id/button" />
+
+            <Button
+                android:layout_weight="1"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Off"
+                android:textColor="@color/white"
+                android:backgroundTint="@color/colorPrimary"
+                android:id="@+id/button2" />
+
+            <Button
+                android:layout_weight="1"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Reset"
+                android:textColor="@color/white"
+                android:backgroundTint="@color/colorPrimary"
+                android:id="@+id/button3" />
+
+            <Button
+                android:layout_weight="1"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Check"
+                android:textColor="@color/white"
+                android:backgroundTint="@color/colorPrimary"
+                android:id="@+id/button4" />
+        </LinearLayout>
+
+    </LinearLayout>
+</LinearLayout>

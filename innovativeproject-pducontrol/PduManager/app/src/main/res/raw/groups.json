@@ -1,0 +1,20 @@
+{
+  "groups" : [
+    {
+      "id":30,
+      "name":"moja pierwsza grupa",
+      "owner":{
+        "id":2,
+        "user_name": "mwojdyla"
+      }
+    },
+    {
+      "id":31,
+      "name":"moja druga grupa",
+      "owner":{
+        "id":3,
+        "user_name": "szaba"
+      }
+    }
+  ]
+}

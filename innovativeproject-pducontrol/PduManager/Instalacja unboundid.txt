@@ -1,0 +1,3 @@
+Postepowac zgodnie z instrukcjami z linku: http://stackoverflow.com/questions/25610727/adding-external-library-in-android-studio
+
+(Osobiscie kierowalem sie Approach 2)
