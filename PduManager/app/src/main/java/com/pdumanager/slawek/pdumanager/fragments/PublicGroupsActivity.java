@@ -108,12 +108,7 @@ public class PublicGroupsActivity extends Fragment implements AdapterView.OnItem
             } catch (ClientProtocolException e) {
                 e.printStackTrace();
             } catch (IOException e) { // wyjatek ktory sie wywoluje gdy nie da sie nawiazacv polaczenia z restem
-                try {
-                    JSONObject groupsJson = new JSONObject(readTextFromRawResource(R.raw.groups));
-                    return groupsJson;
-                } catch (JSONException e1) {
-                    e1.printStackTrace();
-                }
+                e.printStackTrace();
             } catch (JSONException e) {
                 e.printStackTrace();
             }
@@ -145,23 +140,6 @@ public class PublicGroupsActivity extends Fragment implements AdapterView.OnItem
                 }
             }
             return sb.toString();
-        }
-
-        private String readTextFromRawResource(int resourceId) {
-            InputStream input = getResources().openRawResource(resourceId);
-            ByteArrayOutputStream byteArrayOutputStream= new ByteArrayOutputStream();
-            int i;
-            try{
-                i = input.read();
-                while(i != -1){
-                    byteArrayOutputStream.write(i);
-                    i = input.read();
-                }
-                input.close();
-            } catch (IOException e){
-                e.printStackTrace();
-            }
-            return byteArrayOutputStream.toString();
         }
     }
 }

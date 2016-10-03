@@ -18,3 +18,5 @@ public class Constants {
 
         public static final String MY_GROUPS_URL = PDU_MANAGER_URL + "/api/group/get_user_groups/";
         public static final String LOGIN_URL = PDU_MANAGER_URL + "/api/login_by_rest/?";
+        public static final String DEVICES_URL = PDU_MANAGER_URL + "/api/pdus/";
+}

@@ -55,7 +55,7 @@ public class DeviceArrayAdapter extends ArrayAdapter<Device> {
         viewHolder.mDeviceIpTextView.setText("Ip: " + device.ip);
         String device_id = Integer.toString(device.id);
         viewHolder.mDeviceId.setText(device_id );
-        viewHolder.mDeviceDescrTextView.setText("Description: " + device.descr);
+        viewHolder.mDeviceDescrTextView.setText("Description: " + device.description);
         viewHolder.mDeviceNameTextView.setText("Name: " + device.name);
         viewHolder.mDeviceContainerLinearLayout.setVisibility(View.VISIBLE);
         return converterView;

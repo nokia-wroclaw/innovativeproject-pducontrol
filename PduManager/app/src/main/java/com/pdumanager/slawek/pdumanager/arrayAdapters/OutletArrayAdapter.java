@@ -29,13 +29,13 @@ public class OutletArrayAdapter extends ArrayAdapter<Outlet> {
 
     public void setOutlets(Device[] devices, Device selectedDevice){
         clear();
-        for(Device device : devices){
+        /*for(Device device : devices){
             if(device.id == selectedDevice.id){
                 for(Outlet outlet : selectedDevice.outlets){
                     add(outlet);
                 }
             }
-        }
+        }*/
         if(isEmpty()){
             notifyDataSetInvalidated();
         } else {
