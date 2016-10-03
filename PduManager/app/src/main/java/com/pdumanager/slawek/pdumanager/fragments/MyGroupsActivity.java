@@ -97,7 +97,7 @@ public class MyGroupsActivity extends Fragment implements AdapterView.OnItemClic
     private class DownloadData extends AsyncTask {
         @Override
         protected Object doInBackground(Object[] objects) {
-            String url = Constants.MY_GROUPS_URL + "/?username=" + ((GlobalApplication) getActivity().getApplication()).getUsername();   //url do resta
+            String url = Constants.MY_GROUPS_URL + "?username=" + ((GlobalApplication) getActivity().getApplication()).getUsername();   //url do resta
             HttpClient httpclient = new DefaultHttpClient(); //tworze kleinta
             //HttpPost httppost = new HttpPost(url);
             HttpGet httpget = new HttpGet(url);

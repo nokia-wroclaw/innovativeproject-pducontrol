@@ -9,7 +9,7 @@ public class Constants {
         public static final String PDU_MANAGER_URL = "http://192.168.5.116:8000";
 
         //url Matiego
-        public static final String PDU_MANAGER_URL = "http://192.168.1.13:3500"; //Adres ip serwera (Mateusz), do zakomentowania na wlasne potrzeby
+        //public static final String PDU_MANAGER_URL = "http://192.168.1.13:3500"; //Adres ip serwera (Mateusz), do zakomentowania na wlasne potrzeby
 
         //url Kacpra
         //public static final String PDU_MANAGER_URL = "http://192.168.0.101:8000";
