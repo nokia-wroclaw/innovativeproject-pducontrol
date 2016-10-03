@@ -45,6 +45,7 @@ public class MenuActivity extends AppCompatActivity
 
         sharedPrefs = getSharedPreferences(MyPREFERENCES, Context.MODE_PRIVATE);
         String username = sharedPrefs.getString(LoginActivity.Username, "");
+        ((GlobalApplication) this.getApplication()).setUsername(username);
 
         if(TextUtils.isEmpty(username)) {
         //if(username.equals("")) {

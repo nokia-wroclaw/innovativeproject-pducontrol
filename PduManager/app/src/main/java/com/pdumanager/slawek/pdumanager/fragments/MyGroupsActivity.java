@@ -18,6 +18,8 @@ import com.pdumanager.slawek.pdumanager.GlobalApplication;
 import com.pdumanager.slawek.pdumanager.MenuActivity;
 import com.pdumanager.slawek.pdumanager.R;
 import com.pdumanager.slawek.pdumanager.arrayAdapters.GroupArrayAdapter;
+import com.pdumanager.slawek.pdumanager.arrayAdapters.PrivateGroupArrayAdapter;
+import com.pdumanager.slawek.pdumanager.model.GroupPrivateResponse;
 import com.pdumanager.slawek.pdumanager.model.GroupResponse;
 import com.google.gson.reflect.TypeToken;
 import com.google.gson.Gson;
@@ -51,8 +53,8 @@ import java.util.concurrent.ExecutionException;
 
 public class MyGroupsActivity extends Fragment implements AdapterView.OnItemClickListener {
     private ListView mGroupsListView;
-    private GroupArrayAdapter mGroupsAdapter;
-    private GroupResponse mResponse;
+    private PrivateGroupArrayAdapter mGroupsAdapter;
+    private GroupPrivateResponse mResponse;
 
     @Nullable
     @Override
@@ -62,23 +64,13 @@ public class MyGroupsActivity extends Fragment implements AdapterView.OnItemClic
         NavigationView navigationView = ((MenuActivity) getActivity()).getNavigationView();
         navigationView.getMenu().getItem(2).setChecked(true);
 
-        mGroupsAdapter = new GroupArrayAdapter(this.getActivity(), R.layout.private_group_on_list);
+        mGroupsAdapter = new PrivateGroupArrayAdapter(this.getActivity(), R.layout.private_group_on_list);
         mGroupsListView = (ListView) view.findViewById(R.id.groups_list);
         mGroupsListView.setAdapter(mGroupsAdapter);
         mGroupsListView.setOnItemClickListener(this);
-        /*
-        try {
-            JSONObject jsonObject = new JSONObject(readTextFromRawResource(R.raw.groups));
-            mResponse = GroupResponse.fromJsonObject(jsonObject);
-            fillListWithGroups();
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
-        return view;
-    }*/
         try {
             JSONObject groupsJson = (JSONObject) new DownloadData().execute().get();
-            mResponse = GroupResponse.fromJsonObject(groupsJson);
+            mResponse = GroupPrivateResponse.fromJsonObject(groupsJson);
             fillListWithGroups();
         } catch (InterruptedException e) {
             e.printStackTrace();
@@ -89,27 +81,8 @@ public class MyGroupsActivity extends Fragment implements AdapterView.OnItemClic
     }
 
     private void fillListWithGroups() {
-        mGroupsAdapter.setGroups(mResponse.groups);
+        mGroupsAdapter.setGroups(mResponse.privategroupobject.result);
     }
-
-
-    /*
-    private String readTextFromRawResource(int resourceId) {
-        InputStream input = getResources().openRawResource(resourceId);
-        ByteArrayOutputStream byteArrayOutputStream= new ByteArrayOutputStream();
-        int i;
-        try{
-            i = input.read();
-            while(i != -1){
-                byteArrayOutputStream.write(i);
-                i = input.read();
-            }
-            input.close();
-        } catch (IOException e){
-            e.printStackTrace();
-        }
-        return byteArrayOutputStream.toString();
-    }*/
 
     @Override
     public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
@@ -124,7 +97,7 @@ public class MyGroupsActivity extends Fragment implements AdapterView.OnItemClic
     private class DownloadData extends AsyncTask {
         @Override
         protected Object doInBackground(Object[] objects) {
-            String url = Constants.MY_GROUPS_URL + "/?username=mwojdyla";   //url do resta
+            String url = Constants.MY_GROUPS_URL + "/?username=" + ((GlobalApplication) getActivity().getApplication()).getUsername();   //url do resta
             HttpClient httpclient = new DefaultHttpClient(); //tworze kleinta
             //HttpPost httppost = new HttpPost(url);
             HttpGet httpget = new HttpGet(url);
@@ -180,23 +153,6 @@ public class MyGroupsActivity extends Fragment implements AdapterView.OnItemClic
                 }
             }
             return sb.toString();
-        }
-
-        private String readTextFromRawResource(int resourceId) {
-            InputStream input = getResources().openRawResource(resourceId);
-            ByteArrayOutputStream byteArrayOutputStream= new ByteArrayOutputStream();
-            int i;
-            try{
-                i = input.read();
-                while(i != -1){
-                    byteArrayOutputStream.write(i);
-                    i = input.read();
-                }
-                input.close();
-            } catch (IOException e){
-                e.printStackTrace();
-            }
-            return byteArrayOutputStream.toString();
         }
     }
 }

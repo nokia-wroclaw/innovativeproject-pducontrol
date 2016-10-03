@@ -7,6 +7,15 @@ import android.app.Application;
  */
 public class GlobalApplication extends Application {
     private String selectedGroupName = null;
+    private String username;
+
+    public String getUsername() {
+        return username;
+    }
+
+    public void setUsername(String username) {
+        this.username = username;
+    }
 
     public String getSelectedGroupName() {
         return selectedGroupName;
