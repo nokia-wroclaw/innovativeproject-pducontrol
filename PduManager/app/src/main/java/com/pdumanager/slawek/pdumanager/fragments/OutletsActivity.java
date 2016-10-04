@@ -111,7 +111,7 @@ public class OutletsActivity extends Fragment {
         protected Object doInBackground(Object[] objects) {
             Bundle bundle = getArguments();
             int id = (int) bundle.getSerializable("selected_pdu_id");
-            String url = Constants.OUTLETS_URL + id;   //url do resta
+            String url = Constants.OUTLETS_URL + id + "/";   //url do resta
             HttpClient httpclient = new DefaultHttpClient(); //tworze kleinta
             HttpGet httpget = new HttpGet(url);
             HttpResponse response; //odpowiedz z resta
