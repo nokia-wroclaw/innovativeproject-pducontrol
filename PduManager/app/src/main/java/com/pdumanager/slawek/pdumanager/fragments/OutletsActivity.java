@@ -81,7 +81,6 @@ import java.util.concurrent.ExecutionException;
 public class OutletsActivity extends Fragment {
     private ListView mOutletListView;
     private OutletArrayAdapter mArrayAdapter;
-    //private DeviceResponse mResponse;
     private OutletResponse mResponse;
 
     @Nullable
@@ -103,22 +102,9 @@ public class OutletsActivity extends Fragment {
         return view;
     }
 
-   /* private void fillListWithDevices() {
-        int index = 0;
-        Bundle bundle = getArguments();
-        int id = (int) bundle.getSerializable("selected_pdu_id");
-        for(int i = 0; i < mResponse.devices.length; ++i){
-            if(mResponse.devices[i].id == id){
-                index = i;
-                break;
-            }
-        }
-        mArrayAdapter.setOutlets(mResponse.devices, mResponse.devices[index]);
-    }*/
     private void fillListWithOutlets() {
         mArrayAdapter.setOutlets(mResponse.outlets);
     }
-
 
     private class DownloadData extends AsyncTask {
         @Override
@@ -146,14 +132,14 @@ public class OutletsActivity extends Fragment {
                 }
             } catch (ClientProtocolException e) {
                 e.printStackTrace();
-            } catch (IOException e) { // wyjatek ktory sie wywoluje gdy nie da sie nawiazacv polaczenia z restem
+            } catch (IOException e) {
                 e.printStackTrace();
             } catch (JSONException e) {
                 e.printStackTrace();
             }
-            JSONObject groupsJson = new JSONObject(); //tworze obiekt jsonowy ktorego potrzebuje do wyswietlania grup w xmlu
+            JSONObject groupsJson = new JSONObject();
             try {
-                groupsJson.put("outlets", arrayFromRest); //dodaje tablice z resta do klucza 'groups' bo takie pole jest w modelu
+                groupsJson.put("outlets", arrayFromRest);
             } catch (JSONException e) {
                 e.printStackTrace();
             }
@@ -180,25 +166,5 @@ public class OutletsActivity extends Fragment {
             }
             return sb.toString();
         }
-    }
-
-    private String readTextFromRawResource(int resourceId) {
-
-        InputStream inputStream = getResources().openRawResource(resourceId);
-        ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
-
-        int i;
-        try {
-            i = inputStream.read();
-            while (i != -1) {
-                byteArrayOutputStream.write(i);
-                i = inputStream.read();
-            }
-            inputStream.close();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-
-        return byteArrayOutputStream.toString();
     }
 }

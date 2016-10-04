@@ -6,13 +6,16 @@ package com.pdumanager.slawek.pdumanager;
 public class Constants {
         public static final String USERNAME_KEY = "username";
         //url Slawka
+        //praca
         //public static final String PDU_MANAGER_URL = "http://192.168.5.116:8000";
+        //dom
+        public static final String PDU_MANAGER_URL = "http://192.168.8.101:8000";
 
         //url Matiego
         //public static final String PDU_MANAGER_URL = "http://192.168.1.13:3500"; //Adres ip serwera (Mateusz), do zakomentowania na wlasne potrzeby
 
         //url Kacpra
-        public static final String PDU_MANAGER_URL = "http://192.168.0.101:8000";
+        //public static final String PDU_MANAGER_URL = "http://192.168.0.101:8000";
         //public static final String PDU_MANAGER_URL = "http://192.168.1.143:8000";
         public static final String GROUPS_URL = PDU_MANAGER_URL + "/api/groups/";
 
