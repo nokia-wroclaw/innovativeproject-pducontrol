@@ -27,15 +27,11 @@ public class OutletArrayAdapter extends ArrayAdapter<Outlet> {
         mInflater = LayoutInflater.from(context);
     }
 
-    public void setOutlets(Device[] devices, Device selectedDevice){
+    public void setOutlets(Outlet[] outlets){
         clear();
-        /*for(Device device : devices){
-            if(device.id == selectedDevice.id){
-                for(Outlet outlet : selectedDevice.outlets){
-                    add(outlet);
-                }
-            }
-        }*/
+         for(Outlet outlet : outlets){
+            add(outlet);
+        }
         if(isEmpty()){
             notifyDataSetInvalidated();
         } else {

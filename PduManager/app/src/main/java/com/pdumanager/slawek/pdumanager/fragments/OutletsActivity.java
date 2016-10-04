@@ -12,6 +12,7 @@ import android.widget.ListView;
 
 import com.pdumanager.slawek.pdumanager.R;
 import com.pdumanager.slawek.pdumanager.arrayAdapters.OutletArrayAdapter;
+import com.pdumanager.slawek.pdumanager.model.OutletResponse;
 import com.pdumanager.slawek.pdumanager.model.DeviceResponse;
 
 import org.json.JSONException;
@@ -20,7 +21,59 @@ import org.json.JSONObject;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.lang.InterruptedException;
 import java.util.zip.Inflater;
+import android.app.Fragment;
+import android.app.FragmentManager;
+import android.os.AsyncTask;
+import android.support.annotation.Nullable;
+import android.support.design.widget.NavigationView;
+import android.os.Bundle;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.ListView;
+import android.widget.TextView;
+
+import com.pdumanager.slawek.pdumanager.Constants;
+import com.pdumanager.slawek.pdumanager.GlobalApplication;
+import com.pdumanager.slawek.pdumanager.MenuActivity;
+import com.pdumanager.slawek.pdumanager.R;
+import com.pdumanager.slawek.pdumanager.arrayAdapters.GroupArrayAdapter;
+import com.pdumanager.slawek.pdumanager.arrayAdapters.PrivateGroupArrayAdapter;
+import com.pdumanager.slawek.pdumanager.model.GroupPrivateResponse;
+import com.pdumanager.slawek.pdumanager.model.GroupResponse;
+import com.google.gson.reflect.TypeToken;
+import com.google.gson.Gson;
+import com.pdumanager.slawek.pdumanager.model.Outlet;
+import com.pdumanager.slawek.pdumanager.model.OutletResponse;
+
+import org.apache.http.HttpEntity;
+import org.apache.http.HttpResponse;
+import org.apache.http.client.ClientProtocolException;
+import org.apache.http.client.HttpClient;
+import org.apache.http.client.methods.HttpGet;
+import org.apache.http.client.methods.HttpPost;
+import org.apache.http.impl.client.DefaultHttpClient;
+import org.apache.http.client.entity.UrlEncodedFormEntity;
+import org.apache.http.NameValuePair;
+import org.apache.http.message.BasicNameValuePair;
+import org.apache.http.entity.StringEntity;
+import org.apache.http.message.BasicHeader;
+import org.apache.http.protocol.HTTP;
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.io.BufferedReader;
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+
+
+import java.util.concurrent.ExecutionException;
 
 /**
  * Created by slawek on 25.08.16.
@@ -28,7 +81,8 @@ import java.util.zip.Inflater;
 public class OutletsActivity extends Fragment {
     private ListView mOutletListView;
     private OutletArrayAdapter mArrayAdapter;
-    private DeviceResponse mResponse;
+    //private DeviceResponse mResponse;
+    private OutletResponse mResponse;
 
     @Nullable
     @Override
@@ -38,16 +92,18 @@ public class OutletsActivity extends Fragment {
         mArrayAdapter = new OutletArrayAdapter(this.getActivity(), R.layout.outlet_on_list);
         mOutletListView.setAdapter(mArrayAdapter);
         try {
-            JSONObject jsonObject = new JSONObject(readTextFromRawResource(R.raw.devices));
-            mResponse = DeviceResponse.fromJsonObject(jsonObject);
-            fillListWithDevices();
-        } catch (JSONException e) {
+            JSONObject outletsJson = (JSONObject) new DownloadData().execute().get();
+            mResponse = OutletResponse.fromJsonObject(outletsJson);
+            fillListWithOutlets();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        } catch (ExecutionException e) {
             e.printStackTrace();
         }
         return view;
     }
 
-    private void fillListWithDevices() {
+   /* private void fillListWithDevices() {
         int index = 0;
         Bundle bundle = getArguments();
         int id = (int) bundle.getSerializable("selected_pdu_id");
@@ -58,9 +114,73 @@ public class OutletsActivity extends Fragment {
             }
         }
         mArrayAdapter.setOutlets(mResponse.devices, mResponse.devices[index]);
+    }*/
+    private void fillListWithOutlets() {
+        mArrayAdapter.setOutlets(mResponse.outlets);
     }
 
 
+    private class DownloadData extends AsyncTask {
+        @Override
+        protected Object doInBackground(Object[] objects) {
+            Bundle bundle = getArguments();
+            int id = (int) bundle.getSerializable("selected_pdu_id");
+            String url = Constants.OUTLETS_URL + id;   //url do resta
+            HttpClient httpclient = new DefaultHttpClient(); //tworze kleinta
+            HttpGet httpget = new HttpGet(url);
+            HttpResponse response; //odpowiedz z resta
+
+            JSONArray arrayFromRest = new JSONArray();
+            try {
+
+                response = httpclient.execute(httpget);
+
+
+                HttpEntity entity = response.getEntity(); // pobieram status odpowiedzi
+                System.out.println(response.getStatusLine().getStatusCode());
+                if (entity != null && response.getStatusLine().getStatusCode() == 200) { //warunek ze poprawnie weszlo do resta
+                    InputStream instream = entity.getContent(); //pobieram strumien z resta
+                    String resultt = convertStreamToString(instream); //konvertuje strumien na string
+                    arrayFromRest = new JSONArray(resultt); //pobieram tablice z resta
+                    instream.close(); //zamykam strumien
+                }
+            } catch (ClientProtocolException e) {
+                e.printStackTrace();
+            } catch (IOException e) { // wyjatek ktory sie wywoluje gdy nie da sie nawiazacv polaczenia z restem
+                e.printStackTrace();
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+            JSONObject groupsJson = new JSONObject(); //tworze obiekt jsonowy ktorego potrzebuje do wyswietlania grup w xmlu
+            try {
+                groupsJson.put("outlets", arrayFromRest); //dodaje tablice z resta do klucza 'groups' bo takie pole jest w modelu
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+            return groupsJson;
+        }
+
+        public String convertStreamToString(InputStream is) {
+            BufferedReader reader = new BufferedReader(new InputStreamReader(is));
+            StringBuilder sb = new StringBuilder();
+
+            String line = null;
+            try {
+                while ((line = reader.readLine()) != null) {
+                    sb.append(line + "\n");
+                }
+            } catch (IOException e) {
+
+            } finally {
+                try {
+                    is.close();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+            return sb.toString();
+        }
+    }
 
     private String readTextFromRawResource(int resourceId) {
 
