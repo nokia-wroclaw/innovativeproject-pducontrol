@@ -18,6 +18,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewParent;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.Toast;
 
 import com.pdumanager.slawek.pdumanager.fragments.DevicesActivity;
@@ -59,7 +60,21 @@ public class MenuActivity extends AppCompatActivity
             setSupportActionBar(toolbar);
             DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
             ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
-                    this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
+                    this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close){
+
+                @Override
+                public void onDrawerSlide(View drawerView, float slideOffset) {
+                    if (slideOffset != 0) {
+                        View keyboardView = getCurrentFocus();
+                        if (keyboardView != null) {
+                            InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+                            imm.hideSoftInputFromWindow(keyboardView.getWindowToken(), 0);
+                        }
+                    }
+                    super.onDrawerSlide(drawerView, slideOffset);
+                }
+            };
+
             drawer.addDrawerListener(toggle);
             toggle.syncState();
 

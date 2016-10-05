@@ -38,6 +38,21 @@ public class OutletArrayAdapter extends ArrayAdapter<Outlet> {
             notifyDataSetChanged();
         }
     }
+    public void setOutlets(Outlet[] outlets, int[] idOutlets){
+        clear();
+        for(Outlet outlet : outlets){
+            for(int idOutlet : idOutlets){
+                if(outlet.id == idOutlet){
+                    add(outlet);
+                }
+            }
+        }
+        if(isEmpty()){
+            notifyDataSetInvalidated();
+        } else {
+            notifyDataSetChanged();
+        }
+    }
 
     public View getView(int position, View convertView, ViewGroup parent){
         ViewHolder viewHolder;

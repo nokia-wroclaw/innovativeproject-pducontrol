@@ -2,6 +2,7 @@ package com.pdumanager.slawek.pdumanager.fragments;
 
 import android.app.Fragment;
 import android.app.FragmentManager;
+import android.content.Context;
 import android.os.AsyncTask;
 import android.support.annotation.Nullable;
 import android.os.Bundle;
@@ -11,12 +12,14 @@ import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
 import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.TextView;
 
 import com.pdumanager.slawek.pdumanager.Constants;
+import com.pdumanager.slawek.pdumanager.GlobalApplication;
 import com.pdumanager.slawek.pdumanager.MenuActivity;
 import com.pdumanager.slawek.pdumanager.R;
 import com.pdumanager.slawek.pdumanager.arrayAdapters.DeviceArrayAdapter;
@@ -64,6 +67,7 @@ public class DevicesActivity extends Fragment implements AdapterView.OnItemClick
             JSONObject devicesJson = (JSONObject) new DownloadData().execute().get();
             mResponse = DeviceResponse.fromJsonObject(devicesJson);
             fillListWithDevices();
+            ((GlobalApplication) getActivity().getApplication()).setDevices(mResponse.devices);
         } catch (InterruptedException e) {
             e.printStackTrace();
         } catch (ExecutionException e) {
@@ -159,7 +163,13 @@ public class DevicesActivity extends Fragment implements AdapterView.OnItemClick
         Bundle bundle = new Bundle();
         int deviceId = Integer.parseInt(((TextView) view.findViewById(R.id.device_id)).getText().toString());
         bundle.putSerializable("selected_pdu_id", deviceId);
+        bundle.putSerializable("outlets_from_group", false);
         activity.setArguments(bundle);
+        View keyboardView = this.getActivity().getCurrentFocus();
+        if (keyboardView != null) {
+            InputMethodManager imm = (InputMethodManager)this.getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
+            imm.hideSoftInputFromWindow(keyboardView.getWindowToken(), 0);
+        }
         fragmentManager.beginTransaction().replace(R.id.content_frame, activity).addToBackStack( "outlets" ).commit();
     }
 }

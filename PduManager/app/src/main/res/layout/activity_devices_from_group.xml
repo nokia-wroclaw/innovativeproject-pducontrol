@@ -1,13 +1,27 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical" android:layout_width="match_parent"
-    android:layout_height="match_parent">
-    <TextView
-        android:id="@+id/nameGroupSelected"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:paddingBottom="@dimen/small_padding"
+    android:paddingLeft="@dimen/small_padding"
+    android:paddingRight="@dimen/small_padding"
+    android:paddingTop="@dimen/small_padding"
+    tools:context=".fragments.DevicesFromGroupActivity">
+    <EditText
+        android:hint="@string/search_hint"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:gravity="center"
-        android:text="Devices from selected Group"
-        android:textSize="40sp"/>
-
-</LinearLayout>
+        android:layout_height="@dimen/search_form"
+        android:inputType="text"
+        android:ems="10"
+        android:id="@+id/search_input"
+        android:paddingBottom="@dimen/activity_horizontal_margin"
+        android:textColor="@color/black"
+        android:textColorHint="@color/colorPrimary"
+        android:textSize="@dimen/search_input"/>
+    <ListView
+        android:layout_marginTop="@dimen/search_form"
+        android:id="@+id/list_devices"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"/>
+</RelativeLayout>

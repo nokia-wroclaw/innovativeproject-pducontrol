@@ -17,32 +17,19 @@ import com.pdumanager.slawek.pdumanager.Constants;
 import com.pdumanager.slawek.pdumanager.GlobalApplication;
 import com.pdumanager.slawek.pdumanager.MenuActivity;
 import com.pdumanager.slawek.pdumanager.R;
-import com.pdumanager.slawek.pdumanager.arrayAdapters.GroupArrayAdapter;
 import com.pdumanager.slawek.pdumanager.arrayAdapters.PrivateGroupArrayAdapter;
 import com.pdumanager.slawek.pdumanager.model.GroupPrivateResponse;
-import com.pdumanager.slawek.pdumanager.model.GroupResponse;
-import com.google.gson.reflect.TypeToken;
-import com.google.gson.Gson;
 
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
 import org.apache.http.client.ClientProtocolException;
 import org.apache.http.client.HttpClient;
 import org.apache.http.client.methods.HttpGet;
-import org.apache.http.client.methods.HttpPost;
 import org.apache.http.impl.client.DefaultHttpClient;
-import org.apache.http.client.entity.UrlEncodedFormEntity;
-import org.apache.http.NameValuePair;
-import org.apache.http.message.BasicNameValuePair;
-import org.apache.http.entity.StringEntity;
-import org.apache.http.message.BasicHeader;
-import org.apache.http.protocol.HTTP;
-import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.BufferedReader;
-import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
@@ -72,6 +59,7 @@ public class MyGroupsActivity extends Fragment implements AdapterView.OnItemClic
             JSONObject groupsJson = (JSONObject) new DownloadData().execute().get();
             mResponse = GroupPrivateResponse.fromJsonObject(groupsJson);
             fillListWithGroups();
+            ((GlobalApplication) getActivity().getApplication()).setPrivateUserGroups(mResponse.privategroupobject.result);
         } catch (InterruptedException e) {
             e.printStackTrace();
         } catch (ExecutionException e) {

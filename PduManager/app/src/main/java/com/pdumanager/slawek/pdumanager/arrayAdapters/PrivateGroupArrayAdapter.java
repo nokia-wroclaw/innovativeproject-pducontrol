@@ -9,13 +9,12 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.pdumanager.slawek.pdumanager.R;
-import com.pdumanager.slawek.pdumanager.model.Group;
-import com.pdumanager.slawek.pdumanager.model.Result;
+import com.pdumanager.slawek.pdumanager.model.UserGroup;
 
 /**
  * Created by slawek on 29.09.16.
  */
-public class PrivateGroupArrayAdapter extends ArrayAdapter<Result> {
+public class PrivateGroupArrayAdapter extends ArrayAdapter<UserGroup> {
     protected final LayoutInflater mInflater;
     protected final int mResourceId;
     public PrivateGroupArrayAdapter(Context context, int resource) {
@@ -24,9 +23,9 @@ public class PrivateGroupArrayAdapter extends ArrayAdapter<Result> {
         mResourceId = resource;
     }
 
-    public void setGroups(Result[] groups) {
+    public void setGroups(UserGroup[] groups) {
         clear();
-        for(Result group : groups){
+        for(UserGroup group : groups){
             add(group);
         }
         if(isEmpty()){
@@ -47,7 +46,7 @@ public class PrivateGroupArrayAdapter extends ArrayAdapter<Result> {
         } else{
             viewHolder = (ViewHolder) convertView.getTag();
         }
-        Result group = getItem(position);
+        UserGroup group = getItem(position);
         viewHolder.mGroupNameTextView.setText(group.group_name);
         viewHolder.mGroupContainerLinearLayout.setVisibility(View.VISIBLE);
         return convertView;

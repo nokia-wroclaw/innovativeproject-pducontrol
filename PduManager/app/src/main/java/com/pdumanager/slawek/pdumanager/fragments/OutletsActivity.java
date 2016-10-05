@@ -48,6 +48,7 @@ import com.google.gson.reflect.TypeToken;
 import com.google.gson.Gson;
 import com.pdumanager.slawek.pdumanager.model.Outlet;
 import com.pdumanager.slawek.pdumanager.model.OutletResponse;
+import com.pdumanager.slawek.pdumanager.model.UserGroup;
 
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
@@ -103,7 +104,14 @@ public class OutletsActivity extends Fragment {
     }
 
     private void fillListWithOutlets() {
-        mArrayAdapter.setOutlets(mResponse.outlets);
+        Bundle bundle = getArguments();
+        boolean ifFromGroup = (boolean) bundle.getSerializable("outlets_from_group");
+        if(ifFromGroup){
+            int[] idOutlets = ((GlobalApplication) getActivity().getApplication()).getSelectedGroup().outlets_in_group;
+            mArrayAdapter.setOutlets(mResponse.outlets, idOutlets);
+        } else {
+            mArrayAdapter.setOutlets(mResponse.outlets);
+        }
     }
 
     private class DownloadData extends AsyncTask {
