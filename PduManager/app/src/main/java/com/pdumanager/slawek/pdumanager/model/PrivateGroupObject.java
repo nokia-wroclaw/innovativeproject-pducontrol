@@ -7,5 +7,5 @@ import java.io.Serializable;
  */
 
 public class PrivateGroupObject implements Serializable {
-    public Result[] result;
+    public UserGroup[] result;
 }

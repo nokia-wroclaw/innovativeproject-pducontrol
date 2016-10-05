@@ -6,7 +6,7 @@ import java.io.Serializable;
  * Created by kujvinho on 28.09.16.
  */
 
-public class Result implements Serializable {
+public class UserGroup implements Serializable {
     public int[] outlets_in_group;
     public String group_name;
     public int group_id;
