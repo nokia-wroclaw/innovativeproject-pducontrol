@@ -21,13 +21,16 @@ import com.pdumanager.slawek.pdumanager.R;
 import com.pdumanager.slawek.pdumanager.arrayAdapters.GroupArrayAdapter;
 import com.pdumanager.slawek.pdumanager.arrayAdapters.PublicGroupArrayAdapter;
 import com.pdumanager.slawek.pdumanager.model.GroupResponse;
+import com.pdumanager.slawek.pdumanager.GlobalApplication;
 
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
 import org.apache.http.client.ClientProtocolException;
 import org.apache.http.client.HttpClient;
 import org.apache.http.client.methods.HttpGet;
+import org.apache.http.client.methods.HttpPost;
 import org.apache.http.impl.client.DefaultHttpClient;
+import org.apache.http.entity.StringEntity;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -37,12 +40,14 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.concurrent.ExecutionException;
+import java.lang.String;
 
 public class PublicGroupsActivity extends Fragment implements AdapterView.OnItemClickListener {
 
     private ListView mGroupsListView;
     private GroupArrayAdapter mGroupsAdapter;
     private GroupResponse mResponse;
+    private String global_group_name = "";
 
     @Nullable
     @Override
@@ -73,13 +78,60 @@ public class PublicGroupsActivity extends Fragment implements AdapterView.OnItem
         mGroupsAdapter.setGroups(mResponse.groups);
     }
 
+    public String ChangeChar(String word, String oldchar, String newchar){
+        int wynik;
+        wynik = word.indexOf( oldchar );
+
+        if (wynik != -1) {
+            if (wynik != word.length() - 1) {
+                word = word.substring(0, wynik) + newchar + word.substring(wynik + 1, word.length());
+            }
+            else {
+                word = word.substring(0,wynik) + newchar;
+            }
+        }
+        return word;
+    }
+
     @Override
     public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
         String groupName = ((TextView) view.findViewById(R.id.public_group_name)).getText().toString();
-        Toast.makeText(this.getActivity(), groupName + " was imported to your groups", Toast.LENGTH_LONG).show();
+        global_group_name = groupName;
+        try {
+            new Get_Group_To_Private().execute().get();
+            Toast.makeText(this.getActivity(), groupName + " was imported to your groups", Toast.LENGTH_LONG).show();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        } catch (ExecutionException e) {
+            e.printStackTrace();
+        }
     }
 
+    private class Get_Group_To_Private extends AsyncTask{
+        @Override
+        protected Object doInBackground(Object[] objects) {
+            String success = "success";
+            String groupName = ChangeChar(global_group_name, " ", "+");
+            String myuser = ChangeChar(((GlobalApplication) getActivity().getApplication()).getUsername(), " ", "+");
+            String selected_group_url = Constants.PDU_MANAGER_URL + "/api/group/edit_user_in_group/?username=" + myuser + "&" + "group_name=" + groupName;
+            HttpClient httpclientt = new DefaultHttpClient();
+            HttpPost httppost = new HttpPost(selected_group_url);
 
+            try {
+                httpclientt.execute(httppost);
+            }
+            catch (ClientProtocolException e) {
+                e.printStackTrace();
+            }  catch (IOException e) { // wyjatek ktory sie wywoluje gdy nie da sie nawiazacv polaczenia z restem
+                e.printStackTrace();
+            }  catch (IllegalArgumentException e) {
+                e.printStackTrace();
+            }  catch (Exception e) {
+                e.printStackTrace();
+            }
+            return success;
+        }
+    }
     // !!!!!!! Ważne !!!!! serwer djangowy uruchamiam poprzez python mage.py runserver 192.168.5.116:8000, gdzie '192.168.5.116' jest ip mojego kompa
     // Wazne2, kod jest zabezpieczony, ze jesli nie bedzie odpalona apka webowa, to apka mobilna bedzie ciagla jsona z folderu raw
     // Wazne3 jest to kod wstepny, jeszcze nie zrefactorowany, ma sluzyc tylko pomoca, jak zaczac i nalezy go jeszcze poprawić
