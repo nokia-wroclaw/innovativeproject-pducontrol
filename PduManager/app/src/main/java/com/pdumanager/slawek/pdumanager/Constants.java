@@ -8,10 +8,10 @@ public class Constants {
         //praca
         //public static final String PDU_MANAGER_URL = "http://192.168.5.116:8000";
         //dom
-        //public static final String PDU_MANAGER_URL = "http://192.168.8.102:8000";
+        public static final String PDU_MANAGER_URL = "http://192.168.8.101:8000";
 
         //url Matiego
-        public static final String PDU_MANAGER_URL = "http://192.168.1.30:3500";
+        //public static final String PDU_MANAGER_URL = "http://192.168.1.30:3500";
 
         //url Kacpra
         //public static final String PDU_MANAGER_URL = "http://192.168.0.101:8000";
@@ -23,4 +23,5 @@ public class Constants {
         public static final String LOGIN_URL = PDU_MANAGER_URL + "/api/login_by_rest/?";
         public static final String DEVICES_URL = PDU_MANAGER_URL + "/api/pdus/";
         public static final String OUTLETS_URL = PDU_MANAGER_URL + "/api/pdu_outlets/";
+        public static final String IMPORT_GROUP_URL = PDU_MANAGER_URL + "/api/group/edit_user_in_group/?username=";
 }
