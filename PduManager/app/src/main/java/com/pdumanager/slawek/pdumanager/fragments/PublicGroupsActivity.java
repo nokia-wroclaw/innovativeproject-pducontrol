@@ -78,27 +78,12 @@ public class PublicGroupsActivity extends Fragment implements AdapterView.OnItem
         mGroupsAdapter.setGroups(mResponse.groups);
     }
 
-    public String ChangeChar(String word, String oldchar, String newchar){
-        int wynik;
-        wynik = word.indexOf( oldchar );
-
-        if (wynik != -1) {
-            if (wynik != word.length() - 1) {
-                word = word.substring(0, wynik) + newchar + word.substring(wynik + 1, word.length());
-            }
-            else {
-                word = word.substring(0,wynik) + newchar;
-            }
-        }
-        return word;
-    }
-
     @Override
     public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
         String groupName = ((TextView) view.findViewById(R.id.public_group_name)).getText().toString();
         global_group_name = groupName;
         try {
-            new Get_Group_To_Private().execute().get();
+            new GetGroupToPrivate().execute().get();
             Toast.makeText(this.getActivity(), groupName + " was imported to your groups", Toast.LENGTH_LONG).show();
         } catch (InterruptedException e) {
             e.printStackTrace();
@@ -107,13 +92,12 @@ public class PublicGroupsActivity extends Fragment implements AdapterView.OnItem
         }
     }
 
-    private class Get_Group_To_Private extends AsyncTask{
+    private class GetGroupToPrivate extends AsyncTask{
         @Override
         protected Object doInBackground(Object[] objects) {
-            String success = "success";
-            String groupName = ChangeChar(global_group_name, " ", "+");
-            String myuser = ChangeChar(((GlobalApplication) getActivity().getApplication()).getUsername(), " ", "+");
-            String selected_group_url = Constants.PDU_MANAGER_URL + "/api/group/edit_user_in_group/?username=" + myuser + "&" + "group_name=" + groupName;
+            String groupName = global_group_name.replaceAll("\\s","+");
+            String myuser = ((GlobalApplication) getActivity().getApplication()).getUsername().replaceAll("\\s","+");
+            String selected_group_url = Constants.IMPORT_GROUP_URL + myuser + "&" + "group_name=" + groupName;
             HttpClient httpclientt = new DefaultHttpClient();
             HttpPost httppost = new HttpPost(selected_group_url);
 
@@ -129,7 +113,7 @@ public class PublicGroupsActivity extends Fragment implements AdapterView.OnItem
             }  catch (Exception e) {
                 e.printStackTrace();
             }
-            return success;
+            return null;
         }
     }
     // !!!!!!! Ważne !!!!! serwer djangowy uruchamiam poprzez python mage.py runserver 192.168.5.116:8000, gdzie '192.168.5.116' jest ip mojego kompa
