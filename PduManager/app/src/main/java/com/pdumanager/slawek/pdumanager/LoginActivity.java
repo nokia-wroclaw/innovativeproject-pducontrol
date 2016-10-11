@@ -19,8 +19,12 @@ import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
 import org.apache.http.client.HttpClient;
 import org.apache.http.client.methods.HttpGet;
+import org.apache.http.conn.ConnectTimeoutException;
 import org.apache.http.conn.HttpHostConnectException;
 import org.apache.http.impl.client.DefaultHttpClient;
+import org.apache.http.params.BasicHttpParams;
+import org.apache.http.params.HttpConnectionParams;
+import org.apache.http.params.HttpParams;
 import org.apache.http.util.EntityUtils;
 //import org.spongycastle.crypto.PBEParametersGenerator;
 //import org.spongycastle.crypto.digests.SHA256Digest;
@@ -103,6 +107,9 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
             {
                 Toast.makeText(this, "Connection to server refused.", Toast.LENGTH_LONG).show();
             }
+            else if(response != null && response.equals("time_out")) {
+                Toast.makeText(this, "Connection timed out, please try again...", Toast.LENGTH_LONG).show();
+            }
         } catch (InterruptedException e) {
             e.printStackTrace();
         } catch (ExecutionException e) {
@@ -113,9 +120,17 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
 
     public boolean isConnected(){
         ConnectivityManager connMgr = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
+
         NetworkInfo networkInfo = connMgr.getActiveNetworkInfo();
-        if (networkInfo != null && networkInfo.isConnected())
+        if (networkInfo != null && networkInfo.isConnected()) {
+            if (networkInfo.getType() == ConnectivityManager.TYPE_MOBILE)
+                Log.i("isConnected", "Connected to mobile type network");
+            else if (networkInfo.getType() == ConnectivityManager.TYPE_WIFI)
+                Log.i("isConnected", "Connected to wi-fi type network");
+            else if (networkInfo.getType() == ConnectivityManager.TYPE_VPN)
+                Log.i("isConnected", "Connected to VPN type network");
             return true;
+        }
         else
             return false;
     }
@@ -144,8 +159,11 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
 
             String modifiedURL = Constants.LOGIN_URL + "username=" + username + "&password=" + password;
 
-            HttpClient httpClient = new DefaultHttpClient();
             HttpGet httpGet = new HttpGet(modifiedURL);
+            HttpParams httpParams = new BasicHttpParams();
+            HttpConnectionParams.setConnectionTimeout(httpParams, 3000);
+            HttpConnectionParams.setSoTimeout(httpParams, 5000);
+            HttpClient httpClient = new DefaultHttpClient(httpParams);
 
             try {
                 HttpResponse httpResponse = httpClient.execute(httpGet);
@@ -157,6 +175,10 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
             } catch(HttpHostConnectException e) {
                 Log.w("doInBackground", "Connection to server refused");
                 result = "refused";
+                return result;
+            } catch (ConnectTimeoutException e) {
+                Log.w("doInBackground", "Connection timed out");
+                result = "time_out";
                 return result;
             } catch (IOException e) {
                 Log.e("doInBackground", "Caught IOException");
