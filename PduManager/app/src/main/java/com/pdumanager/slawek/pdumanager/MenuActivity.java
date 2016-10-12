@@ -14,6 +14,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.view.menu.MenuView;
 import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -50,10 +51,12 @@ public class MenuActivity extends AppCompatActivity
 
         if(TextUtils.isEmpty(username)) {
         //if(username.equals("")) {
+            Log.i("MenuActivity", "username is empty and redirect now to LoginActivity");
             Intent intent = new Intent(this,LoginActivity.class);
             startActivity(intent);
         }
         else {
+            Log.i("MenuActivity", "username equals " + username );
             setContentView(R.layout.activity_menu);
             ((GlobalApplication) getApplication()).setSelectedGroupName(null);
             Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);

@@ -9,6 +9,7 @@ import android.os.Bundle;
 import android.support.design.widget.NavigationView;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -56,7 +57,8 @@ public class DevicesActivity extends Fragment implements AdapterView.OnItemClick
         super.onCreateView(inflater, container, savedInstanceState);
         View view = inflater.inflate(R.layout.activity_devices, container, false);
         NavigationView navigationView = ((MenuActivity) getActivity()).getNavigationView();
-        navigationView.getMenu().getItem(0).setChecked(true);
+        if(navigationView != null)
+            navigationView.getMenu().getItem(0).setChecked(true);
 
         mInputSearch = (EditText) view.findViewById(R.id.search_input);
         mDevicesListView = (ListView) view.findViewById(R.id.list_devices);
