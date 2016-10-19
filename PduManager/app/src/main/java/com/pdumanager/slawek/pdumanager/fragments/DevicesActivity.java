@@ -164,8 +164,12 @@ public class DevicesActivity extends Fragment implements AdapterView.OnItemClick
         OutletsActivity activity = new OutletsActivity();
         Bundle bundle = new Bundle();
         int deviceId = Integer.parseInt(((TextView) view.findViewById(R.id.device_id)).getText().toString());
+        String[] deviceIp = (((TextView) view.findViewById(R.id.device_ip)).getText().toString()).split("\\s+");
+        String ipNumber = deviceIp[1];
+
         bundle.putSerializable("selected_pdu_id", deviceId);
         bundle.putSerializable("outlets_from_group", false);
+        bundle.putSerializable("pdu_ip", ipNumber);
         activity.setArguments(bundle);
         View keyboardView = this.getActivity().getCurrentFocus();
         if (keyboardView != null) {

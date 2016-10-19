@@ -1,8 +1,10 @@
 package com.pdumanager.slawek.pdumanager.fragments;
 
 import android.app.Fragment;
+import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -35,6 +37,7 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.pdumanager.slawek.pdumanager.Constants;
 import com.pdumanager.slawek.pdumanager.GlobalApplication;
@@ -87,9 +90,11 @@ public class OutletsActivity extends Fragment {
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        Bundle bundle = getArguments();
+        String ip = (String) bundle.getSerializable("pdu_ip");
         View view = inflater.inflate(R.layout.activity_outlets, container, false);
         mOutletListView = (ListView) view.findViewById(R.id.outlet_list_view);
-        mArrayAdapter = new OutletArrayAdapter(this.getActivity(), R.layout.outlet_on_list);
+        mArrayAdapter = new OutletArrayAdapter(this.getActivity(), R.layout.outlet_on_list, ip);
         mOutletListView.setAdapter(mArrayAdapter);
         try {
             JSONObject outletsJson = (JSONObject) new DownloadData().execute().get();
@@ -100,6 +105,8 @@ public class OutletsActivity extends Fragment {
         } catch (ExecutionException e) {
             e.printStackTrace();
         }
+        mOutletListView.setTextFilterEnabled(true);
+
         return view;
     }
 
