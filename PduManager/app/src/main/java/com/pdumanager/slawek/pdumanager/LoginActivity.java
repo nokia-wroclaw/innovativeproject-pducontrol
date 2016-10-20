@@ -173,15 +173,15 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                     result = EntityUtils.toString(httpEntity);
                 }
             } catch(HttpHostConnectException e) {
-                Log.w("doInBackground", "Connection to server refused");
+                Log.w("LoginAttempt", "Connection to server refused");
                 result = "refused";
                 return result;
             } catch (ConnectTimeoutException e) {
-                Log.w("doInBackground", "Connection timed out");
+                Log.w("LoginAttempt", "Connection timed out");
                 result = "time_out";
                 return result;
             } catch (IOException e) {
-                Log.e("doInBackground", "Caught IOException");
+                Log.e("LoginAttempt", "Caught IOException");
                 e.printStackTrace();
                 return result;
             }
