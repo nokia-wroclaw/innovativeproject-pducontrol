@@ -1,6 +1,7 @@
 package com.pdumanager.slawek.pdumanager.arrayAdapters;
 
 import android.content.Context;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -29,6 +30,7 @@ import org.apache.http.params.HttpConnectionParams;
 import org.apache.http.params.HttpParams;
 
 import java.io.IOException;
+import java.util.concurrent.ExecutionException;
 
 /**
  * Created by slawek on 24.08.16.
@@ -131,10 +133,10 @@ public class OutletArrayAdapter extends ArrayAdapter<Outlet> {
         @Override
         public void onClick(View v) {
             String url = "";
-            HttpParams httpParams = new BasicHttpParams();
-            HttpConnectionParams.setConnectionTimeout(httpParams, 3000);
-            HttpConnectionParams.setSoTimeout(httpParams, 5000);
-            HttpClient httpClient = new DefaultHttpClient(httpParams);
+//            HttpParams httpParams = new BasicHttpParams();
+//            HttpConnectionParams.setConnectionTimeout(httpParams, 3000);
+//            HttpConnectionParams.setSoTimeout(httpParams, 5000);
+//            HttpClient httpClient = new DefaultHttpClient(httpParams);
 
             switch(v.getId())
             {
@@ -159,17 +161,64 @@ public class OutletArrayAdapter extends ArrayAdapter<Outlet> {
                     break;
             }
 
+            try {
+                int statusCode = new RequestSender().execute(url).get();
+
+                if(statusCode != -1)
+                    Log.i("OutletArrayAdapter", "Request was sent properly");
+                else
+                    Log.w("OutletArrayAdapter", "Something went wrong with request sending");
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            } catch (ExecutionException e) {
+                e.printStackTrace();
+            }
+
+
+//            HttpGet httpGet = new HttpGet(url);
+//
+//            try {
+//                HttpResponse httpResponse = httpClient.execute(httpGet);
+//            } catch(HttpHostConnectException e) {
+//                Log.w("doInBackground", "Connection to server refused");
+//            } catch (ConnectTimeoutException e) {
+//                Log.w("doInBackground", "Connection timed out");
+//            } catch (IOException e) {
+//                Log.e("doInBackground", "Caught IOException");
+//            }
+        }
+    }
+
+    class RequestSender extends AsyncTask<String, Object, Integer>
+    {
+
+        @Override
+        protected Integer doInBackground(String... params) {
+            int result = -1;
+            String url = params[0];
+
+            HttpParams httpParams = new BasicHttpParams();
+            HttpConnectionParams.setConnectionTimeout(httpParams, 3000);
+            HttpConnectionParams.setSoTimeout(httpParams, 5000);
+            HttpClient httpClient = new DefaultHttpClient(httpParams);
+
             HttpGet httpGet = new HttpGet(url);
 
             try {
                 HttpResponse httpResponse = httpClient.execute(httpGet);
+                result = httpResponse.getStatusLine().getStatusCode();
             } catch(HttpHostConnectException e) {
-                Log.w("doInBackground", "Connection to server refused");
+                Log.w("RequestSender", "Connection to server refused");
             } catch (ConnectTimeoutException e) {
-                Log.w("doInBackground", "Connection timed out");
+                Log.w("RequestSender", "Connection timed out");
             } catch (IOException e) {
-                Log.e("doInBackground", "Caught IOException");
+                Log.e("RequestSender", "Caught IOException");
+            } finally {
+                return result;
             }
+
         }
+
     }
+
 }
