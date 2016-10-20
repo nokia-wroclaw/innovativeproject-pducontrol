@@ -13,12 +13,15 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.pdumanager.slawek.pdumanager.Constants;
 import com.pdumanager.slawek.pdumanager.R;
+import com.pdumanager.slawek.pdumanager.fragments.OutletsActivity;
 import com.pdumanager.slawek.pdumanager.model.Device;
 import com.pdumanager.slawek.pdumanager.model.Outlet;
 
+import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
 import org.apache.http.client.HttpClient;
 import org.apache.http.client.methods.HttpGet;
@@ -28,9 +31,16 @@ import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.params.BasicHttpParams;
 import org.apache.http.params.HttpConnectionParams;
 import org.apache.http.params.HttpParams;
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 
+import java.io.BufferedReader;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.util.concurrent.ExecutionException;
+import java.util.concurrent.TimeUnit;
 
 /**
  * Created by slawek on 24.08.16.
@@ -39,7 +49,7 @@ public class OutletArrayAdapter extends ArrayAdapter<Outlet> {
     private final LayoutInflater mInflater;
     private final int mResource;
     private final String ipNumber;
-
+    private String user;
     public OutletArrayAdapter(Context context, int resource, String ip) {
         super(context, R.layout.outlet_on_list);
         mResource = resource;
@@ -47,7 +57,8 @@ public class OutletArrayAdapter extends ArrayAdapter<Outlet> {
         ipNumber = ip;
     }
 
-    public void setOutlets(Outlet[] outlets){
+    public void setOutlets(Outlet[] outlets, String user){
+        this.user = user;
         clear();
          for(Outlet outlet : outlets){
             add(outlet);
@@ -58,7 +69,8 @@ public class OutletArrayAdapter extends ArrayAdapter<Outlet> {
             notifyDataSetChanged();
         }
     }
-    public void setOutlets(Outlet[] outlets, int[] idOutlets){
+    public void setOutlets(Outlet[] outlets, int[] idOutlets, String user){
+        this.user = user;
         clear();
         for(Outlet outlet : outlets){
             for(int idOutlet : idOutlets){
@@ -137,19 +149,18 @@ public class OutletArrayAdapter extends ArrayAdapter<Outlet> {
 //            HttpConnectionParams.setConnectionTimeout(httpParams, 3000);
 //            HttpConnectionParams.setSoTimeout(httpParams, 5000);
 //            HttpClient httpClient = new DefaultHttpClient(httpParams);
-
             switch(v.getId())
             {
                 case R.id.button:
-                    url = Constants.SWITCH_ON + "?outlet_nr=" + outletNumber + "&pdu_ip=" + pduIp;
+                    url = Constants.SWITCH_ON + "?outlet_nr=" + outletNumber + "&pdu_ip=" + pduIp + "&username=" + user;
                     Log.i("OutletArrayAdapter", "Clicked ON! " + url);
                     break;
                 case R.id.button2:
-                    url = Constants.SWITCH_OFF + "?outlet_nr=" + outletNumber + "&pdu_ip=" + pduIp;
+                    url = Constants.SWITCH_OFF + "?outlet_nr=" + outletNumber + "&pdu_ip=" + pduIp + "&username=" + user;
                     Log.i("OutletArrayAdapter", "Clicked OFF! " + url);
                     break;
                 case R.id.button3:
-                    url = Constants.RESET + "?outlet_nr=" + outletNumber + "&pdu_ip=" + pduIp;
+                    url = Constants.RESET + "?outlet_nr=" + outletNumber + "&pdu_ip=" + pduIp + "&username=" + user;
                     Log.i("OutletArrayAdapter", "Clicked RESET! " + url);
                     break;
                 case R.id.button4:
@@ -162,15 +173,28 @@ public class OutletArrayAdapter extends ArrayAdapter<Outlet> {
             }
 
             try {
-                int statusCode = new RequestSender().execute(url).get();
+                JSONObject conectionResult = new RequestSender().execute(url).get();
 
-                if(statusCode != -1)
+                if(conectionResult != null) {
+                    if ((conectionResult.get("result")).equals("on")) {
+                        Toast.makeText(getContext(), "Outlet is currently active", Toast.LENGTH_SHORT).show();
+                        ((ImageView) buttonView.findViewById(R.id.outlet_state)).setImageResource(R.drawable.green_circle);
+                    } else {
+                        Toast.makeText(getContext(), "Outlet is currently disabled", Toast.LENGTH_SHORT).show();
+                        ((ImageView) buttonView.findViewById(R.id.outlet_state)).setImageResource(R.drawable.red_circle);
+                    }
                     Log.i("OutletArrayAdapter", "Request was sent properly");
-                else
+                }
+                else{
+                    Toast.makeText(getContext(), "Error! Outlet status is unknown", Toast.LENGTH_SHORT).show();
                     Log.w("OutletArrayAdapter", "Something went wrong with request sending");
+                    ((ImageView) buttonView.findViewById(R.id.outlet_state)).setImageResource(R.drawable.grey_circle);
+                }
             } catch (InterruptedException e) {
                 e.printStackTrace();
             } catch (ExecutionException e) {
+                e.printStackTrace();
+            } catch (JSONException e) {
                 e.printStackTrace();
             }
 
@@ -189,34 +213,62 @@ public class OutletArrayAdapter extends ArrayAdapter<Outlet> {
         }
     }
 
-    class RequestSender extends AsyncTask<String, Object, Integer>
+    class RequestSender extends AsyncTask<String, Object, JSONObject>
     {
 
         @Override
-        protected Integer doInBackground(String... params) {
-            int result = -1;
+        protected JSONObject doInBackground(String... params) {
+            String result = "";
             String url = params[0];
 
             HttpParams httpParams = new BasicHttpParams();
-            HttpConnectionParams.setConnectionTimeout(httpParams, 3000);
-            HttpConnectionParams.setSoTimeout(httpParams, 5000);
+            HttpConnectionParams.setConnectionTimeout(httpParams, 20000);
+            HttpConnectionParams.setSoTimeout(httpParams, 15000);
             HttpClient httpClient = new DefaultHttpClient(httpParams);
 
             HttpGet httpGet = new HttpGet(url);
-
+            JSONObject jsonObject = new JSONObject();
             try {
                 HttpResponse httpResponse = httpClient.execute(httpGet);
-                result = httpResponse.getStatusLine().getStatusCode();
+                HttpEntity entity = httpResponse.getEntity(); // pobieram status odpowiedzi
+                if (entity != null && httpResponse.getStatusLine().getStatusCode() == 200) { //warunek ze poprawnie weszlo do resta
+                    InputStream instream = entity.getContent(); //pobieram strumien z resta
+                    result = convertStreamToString(instream); //konvertuje strumien na string
+                    jsonObject = new JSONObject(result); //pobieram tablice z resta
+                    instream.close(); //zamykam strumien
+                    return jsonObject;
+                }
             } catch(HttpHostConnectException e) {
                 Log.w("RequestSender", "Connection to server refused");
             } catch (ConnectTimeoutException e) {
                 Log.w("RequestSender", "Connection timed out");
             } catch (IOException e) {
                 Log.e("RequestSender", "Caught IOException");
-            } finally {
-                return result;
+            } catch (JSONException e) {
+                e.printStackTrace();
             }
+            return null;
 
+        }
+        public String convertStreamToString(InputStream is) {
+            BufferedReader reader = new BufferedReader(new InputStreamReader(is));
+            StringBuilder sb = new StringBuilder();
+
+            String line = null;
+            try {
+                while ((line = reader.readLine()) != null) {
+                    sb.append(line + "\n");
+                }
+            } catch (IOException e) {
+
+            } finally {
+                try {
+                    is.close();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+            return sb.toString();
         }
 
     }

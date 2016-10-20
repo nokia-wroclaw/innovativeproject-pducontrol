@@ -113,11 +113,12 @@ public class OutletsActivity extends Fragment {
     private void fillListWithOutlets() {
         Bundle bundle = getArguments();
         boolean ifFromGroup = (boolean) bundle.getSerializable("outlets_from_group");
+        String user = ((GlobalApplication) getActivity().getApplication()).getUsername();
         if(ifFromGroup){
             int[] idOutlets = ((GlobalApplication) getActivity().getApplication()).getSelectedGroup().outlets_in_group;
-            mArrayAdapter.setOutlets(mResponse.outlets, idOutlets);
+            mArrayAdapter.setOutlets(mResponse.outlets, idOutlets, user);
         } else {
-            mArrayAdapter.setOutlets(mResponse.outlets);
+            mArrayAdapter.setOutlets(mResponse.outlets, user);
         }
     }
 
