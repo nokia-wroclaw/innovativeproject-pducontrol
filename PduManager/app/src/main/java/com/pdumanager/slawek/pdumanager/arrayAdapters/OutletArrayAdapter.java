@@ -12,6 +12,7 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -49,16 +50,18 @@ public class OutletArrayAdapter extends ArrayAdapter<Outlet> {
     private final LayoutInflater mInflater;
     private final int mResource;
     private final String ipNumber;
-    private String user;
-    public OutletArrayAdapter(Context context, int resource, String ip) {
+    private final String user;
+    private final ProgressBar bar;
+    public OutletArrayAdapter(Context context, int resource, String ip, String user, View view) {
         super(context, R.layout.outlet_on_list);
         mResource = resource;
         mInflater = LayoutInflater.from(context);
         ipNumber = ip;
+        this.user = user;
+        this.bar = ((ProgressBar) view.findViewById(R.id.progressBar));
     }
 
-    public void setOutlets(Outlet[] outlets, String user){
-        this.user = user;
+    public void setOutlets(Outlet[] outlets){
         clear();
          for(Outlet outlet : outlets){
             add(outlet);
@@ -69,8 +72,7 @@ public class OutletArrayAdapter extends ArrayAdapter<Outlet> {
             notifyDataSetChanged();
         }
     }
-    public void setOutlets(Outlet[] outlets, int[] idOutlets, String user){
-        this.user = user;
+    public void setOutlets(Outlet[] outlets, int[] idOutlets){
         clear();
         for(Outlet outlet : outlets){
             for(int idOutlet : idOutlets){
@@ -142,13 +144,10 @@ public class OutletArrayAdapter extends ArrayAdapter<Outlet> {
             outletNumber = number;
         }
 
+
         @Override
         public void onClick(View v) {
             String url = "";
-//            HttpParams httpParams = new BasicHttpParams();
-//            HttpConnectionParams.setConnectionTimeout(httpParams, 3000);
-//            HttpConnectionParams.setSoTimeout(httpParams, 5000);
-//            HttpClient httpClient = new DefaultHttpClient(httpParams);
             switch(v.getId())
             {
                 case R.id.button:
@@ -197,24 +196,15 @@ public class OutletArrayAdapter extends ArrayAdapter<Outlet> {
             } catch (JSONException e) {
                 e.printStackTrace();
             }
-
-
-//            HttpGet httpGet = new HttpGet(url);
-//
-//            try {
-//                HttpResponse httpResponse = httpClient.execute(httpGet);
-//            } catch(HttpHostConnectException e) {
-//                Log.w("doInBackground", "Connection to server refused");
-//            } catch (ConnectTimeoutException e) {
-//                Log.w("doInBackground", "Connection timed out");
-//            } catch (IOException e) {
-//                Log.e("doInBackground", "Caught IOException");
-//            }
         }
     }
 
     class RequestSender extends AsyncTask<String, Object, JSONObject>
     {
+        @Override
+        protected void onPreExecute() {
+            Toast.makeText(getContext(), "Please wait", Toast.LENGTH_SHORT).show();
+        }
 
         @Override
         protected JSONObject doInBackground(String... params) {

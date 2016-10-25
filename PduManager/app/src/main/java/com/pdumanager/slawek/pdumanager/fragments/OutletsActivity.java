@@ -36,6 +36,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ListView;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -92,9 +93,10 @@ public class OutletsActivity extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         Bundle bundle = getArguments();
         String ip = (String) bundle.getSerializable("pdu_ip");
+        String user = ((GlobalApplication) getActivity().getApplication()).getUsername();
         View view = inflater.inflate(R.layout.activity_outlets, container, false);
         mOutletListView = (ListView) view.findViewById(R.id.outlet_list_view);
-        mArrayAdapter = new OutletArrayAdapter(this.getActivity(), R.layout.outlet_on_list, ip);
+        mArrayAdapter = new OutletArrayAdapter(this.getActivity(), R.layout.outlet_on_list, ip, user, view);
         mOutletListView.setAdapter(mArrayAdapter);
         try {
             JSONObject outletsJson = (JSONObject) new DownloadData().execute().get();
@@ -113,12 +115,11 @@ public class OutletsActivity extends Fragment {
     private void fillListWithOutlets() {
         Bundle bundle = getArguments();
         boolean ifFromGroup = (boolean) bundle.getSerializable("outlets_from_group");
-        String user = ((GlobalApplication) getActivity().getApplication()).getUsername();
         if(ifFromGroup){
             int[] idOutlets = ((GlobalApplication) getActivity().getApplication()).getSelectedGroup().outlets_in_group;
-            mArrayAdapter.setOutlets(mResponse.outlets, idOutlets, user);
+            mArrayAdapter.setOutlets(mResponse.outlets, idOutlets);
         } else {
-            mArrayAdapter.setOutlets(mResponse.outlets, user);
+            mArrayAdapter.setOutlets(mResponse.outlets);
         }
     }
 
