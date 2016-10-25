@@ -61,8 +61,7 @@ public class OutletArrayAdapter extends ArrayAdapter<Outlet> {
         this.bar = ((ProgressBar) view.findViewById(R.id.progressBar));
     }
 
-    public void setOutlets(Outlet[] outlets, String user){
-        this.user = user;
+    public void setOutlets(Outlet[] outlets){
         clear();
          for(Outlet outlet : outlets){
             add(outlet);
