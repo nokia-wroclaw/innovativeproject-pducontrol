@@ -8,9 +8,9 @@ public class Constants {
         //praca
         //public static final String PDU_MANAGER_URL = "http://192.168.5.116:8000";
         //dom
-        public static final String PDU_MANAGER_URL = "http://192.168.43.178:8000";
+        public static final String PDU_MANAGER_URL = "http://192.168.8.100:8000";
 
-        //url Matieg
+        //url Matiego
         //public static final String PDU_MANAGER_URL = "http://192.168.1.30:3500";
 
         //url Kacpra

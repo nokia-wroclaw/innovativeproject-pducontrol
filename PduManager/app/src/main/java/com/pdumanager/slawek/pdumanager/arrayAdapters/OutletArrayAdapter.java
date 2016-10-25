@@ -61,7 +61,8 @@ public class OutletArrayAdapter extends ArrayAdapter<Outlet> {
         this.bar = ((ProgressBar) view.findViewById(R.id.progressBar));
     }
 
-    public void setOutlets(Outlet[] outlets){
+    public void setOutlets(Outlet[] outlets, String user){
+        this.user = user;
         clear();
          for(Outlet outlet : outlets){
             add(outlet);
@@ -143,7 +144,6 @@ public class OutletArrayAdapter extends ArrayAdapter<Outlet> {
             pduIp = ip;
             outletNumber = number;
         }
-
 
         @Override
         public void onClick(View v) {
