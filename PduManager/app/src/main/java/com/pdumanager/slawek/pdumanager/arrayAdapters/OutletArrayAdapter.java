@@ -51,7 +51,9 @@ public class OutletArrayAdapter extends ArrayAdapter<Outlet> {
     private final int mResource;
     private final String ipNumber;
     private final String user;
+    protected JSONObject jsonObjectResponse;
     private final ProgressBar bar;
+
     public OutletArrayAdapter(Context context, int resource, String ip, String user, View view) {
         super(context, R.layout.outlet_on_list);
         mResource = resource;
@@ -61,36 +63,37 @@ public class OutletArrayAdapter extends ArrayAdapter<Outlet> {
         this.bar = ((ProgressBar) view.findViewById(R.id.progressBar));
     }
 
-    public void setOutlets(Outlet[] outlets){
+    public void setOutlets(Outlet[] outlets) {
         clear();
-         for(Outlet outlet : outlets){
+        for (Outlet outlet : outlets) {
             add(outlet);
         }
-        if(isEmpty()){
-            notifyDataSetInvalidated();
-        } else {
-            notifyDataSetChanged();
-        }
-    }
-    public void setOutlets(Outlet[] outlets, int[] idOutlets){
-        clear();
-        for(Outlet outlet : outlets){
-            for(int idOutlet : idOutlets){
-                if(outlet.id == idOutlet){
-                    add(outlet);
-                }
-            }
-        }
-        if(isEmpty()){
+        if (isEmpty()) {
             notifyDataSetInvalidated();
         } else {
             notifyDataSetChanged();
         }
     }
 
-    public View getView(int position, View convertView, ViewGroup parent){
+    public void setOutlets(Outlet[] outlets, int[] idOutlets) {
+        clear();
+        for (Outlet outlet : outlets) {
+            for (int idOutlet : idOutlets) {
+                if (outlet.id == idOutlet) {
+                    add(outlet);
+                }
+            }
+        }
+        if (isEmpty()) {
+            notifyDataSetInvalidated();
+        } else {
+            notifyDataSetChanged();
+        }
+    }
+
+    public View getView(int position, View convertView, ViewGroup parent) {
         ViewHolder viewHolder;
-        if(convertView == null){
+        if (convertView == null) {
             viewHolder = new ViewHolder();
             convertView = mInflater.inflate(mResource, parent, false);
             viewHolder.outletTextView = (TextView) convertView.findViewById(R.id.outletTextView);
@@ -120,7 +123,7 @@ public class OutletArrayAdapter extends ArrayAdapter<Outlet> {
         return convertView;
     }
 
-    private class ViewHolder{
+    private class ViewHolder {
         LinearLayout mOutletLineraLayout;
         TextView outletTextView;
         TextView mOutletDescription;
@@ -131,14 +134,31 @@ public class OutletArrayAdapter extends ArrayAdapter<Outlet> {
         Button checkButton;
     }
 
-    public class ButtonClickListener implements View.OnClickListener
-    {
+    public class ObjectToAsyncTask {
+        private String url;
+        private ImageView imageView;
+
+        public String getUrl() {
+            return url;
+        }
+
+        public ImageView getImageView() {
+            return imageView;
+        }
+
+
+        public ObjectToAsyncTask(String url, ImageView imageView) {
+            this.url = url;
+            this.imageView = imageView;
+        }
+    }
+
+    public class ButtonClickListener implements View.OnClickListener {
         private View buttonView;
         private String pduIp;
         private int outletNumber;
 
-        public ButtonClickListener(View v, String ip, int number)
-        {
+        public ButtonClickListener(View v, String ip, int number) {
             buttonView = v;
             pduIp = ip;
             outletNumber = number;
@@ -147,8 +167,7 @@ public class OutletArrayAdapter extends ArrayAdapter<Outlet> {
         @Override
         public void onClick(View v) {
             String url = "";
-            switch(v.getId())
-            {
+            switch (v.getId()) {
                 case R.id.button:
                     url = Constants.SWITCH_ON + "?outlet_nr=" + outletNumber + "&pdu_ip=" + pduIp + "&username=" + user;
                     Log.i("OutletArrayAdapter", "Clicked ON! " + url);
@@ -169,46 +188,27 @@ public class OutletArrayAdapter extends ArrayAdapter<Outlet> {
                     Log.w("OutletArrayAdapter", "Unknown button ID, url is empty!");
                     break;
             }
+            ObjectToAsyncTask objectToAsyncTask = new ObjectToAsyncTask(url, (ImageView) buttonView.findViewById(R.id.outlet_state));
+            new RequestSender().execute(objectToAsyncTask);
 
-            try {
-                JSONObject conectionResult = new RequestSender().execute(url).get();
 
-                if(conectionResult != null) {
-                    if ((conectionResult.get("result")).equals("on")) {
-                        Toast.makeText(getContext(), "Outlet is currently active", Toast.LENGTH_SHORT).show();
-                        ((ImageView) buttonView.findViewById(R.id.outlet_state)).setImageResource(R.drawable.green_circle);
-                    } else {
-                        Toast.makeText(getContext(), "Outlet is currently disabled", Toast.LENGTH_SHORT).show();
-                        ((ImageView) buttonView.findViewById(R.id.outlet_state)).setImageResource(R.drawable.red_circle);
-                    }
-                    Log.i("OutletArrayAdapter", "Request was sent properly");
-                }
-                else{
-                    Toast.makeText(getContext(), "Error! Outlet status is unknown", Toast.LENGTH_SHORT).show();
-                    Log.w("OutletArrayAdapter", "Something went wrong with request sending");
-                    ((ImageView) buttonView.findViewById(R.id.outlet_state)).setImageResource(R.drawable.grey_circle);
-                }
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            } catch (ExecutionException e) {
-                e.printStackTrace();
-            } catch (JSONException e) {
-                e.printStackTrace();
-            }
         }
     }
 
-    class RequestSender extends AsyncTask<String, Object, JSONObject>
-    {
+    class RequestSender extends AsyncTask<ObjectToAsyncTask, Object, JSONObject> {
+        private String url;
+        private ImageView button;
+
         @Override
         protected void onPreExecute() {
-            Toast.makeText(getContext(), "Please wait", Toast.LENGTH_SHORT).show();
+            bar.setVisibility(View.VISIBLE);
         }
 
         @Override
-        protected JSONObject doInBackground(String... params) {
+        protected JSONObject doInBackground(ObjectToAsyncTask... params) {
             String result = "";
-            String url = params[0];
+            url = params[0].getUrl();
+            button = params[0].getImageView();
 
             HttpParams httpParams = new BasicHttpParams();
             HttpConnectionParams.setConnectionTimeout(httpParams, 20000);
@@ -216,18 +216,16 @@ public class OutletArrayAdapter extends ArrayAdapter<Outlet> {
             HttpClient httpClient = new DefaultHttpClient(httpParams);
 
             HttpGet httpGet = new HttpGet(url);
-            JSONObject jsonObject = new JSONObject();
             try {
                 HttpResponse httpResponse = httpClient.execute(httpGet);
                 HttpEntity entity = httpResponse.getEntity(); // pobieram status odpowiedzi
                 if (entity != null && httpResponse.getStatusLine().getStatusCode() == 200) { //warunek ze poprawnie weszlo do resta
                     InputStream instream = entity.getContent(); //pobieram strumien z resta
                     result = convertStreamToString(instream); //konvertuje strumien na string
-                    jsonObject = new JSONObject(result); //pobieram tablice z resta
+                    jsonObjectResponse = new JSONObject(result); //pobieram tablice z resta
                     instream.close(); //zamykam strumien
-                    return jsonObject;
                 }
-            } catch(HttpHostConnectException e) {
+            } catch (HttpHostConnectException e) {
                 Log.w("RequestSender", "Connection to server refused");
             } catch (ConnectTimeoutException e) {
                 Log.w("RequestSender", "Connection timed out");
@@ -239,6 +237,30 @@ public class OutletArrayAdapter extends ArrayAdapter<Outlet> {
             return null;
 
         }
+
+        @Override
+        protected void onPostExecute(JSONObject jsonObject) {
+            bar.setVisibility(View.GONE);
+            try {
+                if (jsonObjectResponse != null) {
+                    if ((jsonObjectResponse.get("result")).equals("on")) {
+                        Toast.makeText(getContext(), "Outlet is currently active", Toast.LENGTH_SHORT).show();
+                        button.setImageResource(R.drawable.green_circle);
+                    } else {
+                        Toast.makeText(getContext(), "Outlet is currently disabled", Toast.LENGTH_SHORT).show();
+                        button.setImageResource(R.drawable.red_circle);
+                    }
+                    Log.i("OutletArrayAdapter", "Request was sent properly");
+                } else {
+                    Toast.makeText(getContext(), "Error! Outlet status is unknown", Toast.LENGTH_SHORT).show();
+                    Log.w("OutletArrayAdapter", "Something went wrong with request sending");
+                    button.setImageResource(R.drawable.grey_circle);
+                }
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+        }
+
         public String convertStreamToString(InputStream is) {
             BufferedReader reader = new BufferedReader(new InputStreamReader(is));
             StringBuilder sb = new StringBuilder();
